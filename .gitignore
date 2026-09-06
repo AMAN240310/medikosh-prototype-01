@@ -1,0 +1,94 @@
+# ====================================================================
+# Environment & Secrets (NEVER commit actual API keys or credentials)
+# ====================================================================
+.env
+.env.*
+*.env
+**/.env
+**/.env.*
+!**/.env.example
+!.env.example
+
+# ====================================================================
+# Dependencies & Package Managers
+# ====================================================================
+node_modules/
+**/node_modules/
+.pnp
+.pnp.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ====================================================================
+# Build & Distribution Artifacts
+# ====================================================================
+backend/node_gateway/dist/
+voice-intake-frontend/dist/
+dist/
+build/
+out/
+.next/
+
+# ====================================================================
+# Python Bytecode, Caches & Virtual Environments
+# ====================================================================
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+.eggs/
+
+# ====================================================================
+# Local Database, Runtime Storage & Logs
+# ====================================================================
+.data/
+**/.data/
+*.sqlite
+*.sqlite3
+*.db
+*.log
+logs/
+*.pid
+*.seed
+
+# ====================================================================
+# OS & System Files
+# ====================================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ====================================================================
+# IDE & Editor Configuration
+# ====================================================================
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-workspace
+*.sublime-project
+*.swp
+*.swo
+*~

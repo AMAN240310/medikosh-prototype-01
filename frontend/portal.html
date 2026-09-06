@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#ebf1f8]">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>MediCare - Patient Care Portal</title>
+
+  <!-- Tailwind CSS v3 with plugins -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Google Fonts: Plus Jakarta Sans & Caveat -->
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            script: ['"Caveat"', 'cursive'],
+          },
+          colors: {
+            neu: {
+              base: '#ebf1f8',
+              surface: '#ecf2f9',
+              dark: '#cbd5e1',
+              textPrimary: '#1e293b',
+              textSecondary: '#64748b',
+              textMuted: '#94a3b8',
+              accentBlue: '#3b82f6',
+              accentPurple: '#6366f1',
+              accentCyan: '#0ea5e9'
+            },
+            neo: {
+              bg: '#eaf0f8',
+              card: '#ebf1f8',
+              border: '#dbe5f1',
+              dark: '#1e293b',
+              muted: '#64748b',
+              blue: '#4f46e5',
+              accent: '#3b82f6',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Neomorphic Custom Stylesheets -->
+  <style data-purpose="neomorphism-effects">
+    body {
+      background-color: #ebf1f8;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #1e293b;
+    }
+
+    /* Standard embossed soft shadow */
+    .neu-flat {
+      background: #ebf1f8;
+      box-shadow: 7px 7px 15px #d1d9e6, -7px -7px 15px #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .neu-flat-sm {
+      background: #ebf1f8;
+      box-shadow: 4px 4px 9px #d3dce8, -4px -4px 9px #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+    }
+
+    /* Pressed / Inset Shadow */
+    .neu-inset {
+      background: #ebf1f8;
+      box-shadow: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
+    }
+
+    /* Interactive button / pill hover */
+    .neu-button {
+      transition: all 0.2s ease;
+      box-shadow: 5px 5px 12px #d1d9e6, -5px -5px 12px #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+    }
+
+    .neu-button:hover {
+      box-shadow: 2px 2px 5px #d1d9e6, -2px -2px 5px #ffffff;
+      transform: translateY(1px);
+    }
+
+    .neu-button:active {
+      box-shadow: inset 3px 3px 6px #d1d9e6, inset -3px -3px 6px #ffffff;
+    }
+
+    /* Active navigation item embossed style */
+    .neu-nav-active {
+      background: #ebf1f8 !important;
+      box-shadow: inset 3px 3px 6px #d5dee9, inset -3px -3px 6px #ffffff !important;
+      color: #3b82f6 !important;
+    }
+
+    /* Circular gauge progress bar */
+    .circular-gauge {
+      background: conic-gradient(#4378ff 0% 74%, #e2e8f0 74% 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 5px 5px 15px #d1d9e6, -5px -5px 15px #ffffff;
+    }
+
+    .circular-gauge-inner {
+      width: 82%;
+      height: 82%;
+      border-radius: 50%;
+      background: #ebf1f8;
+      box-shadow: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
+    }
+
+    /* Outer Raised Neomorphic Surfaces */
+    .neo-raised {
+      background: #ebf1f8;
+      box-shadow:
+        -7px -7px 16px rgba(255, 255, 255, 0.95),
+        7px 7px 18px rgba(166, 180, 200, 0.45);
+    }
+
+    .neo-raised-sm {
+      background: #ebf1f8;
+      box-shadow:
+        -4px -4px 10px rgba(255, 255, 255, 0.9),
+        4px 4px 10px rgba(166, 180, 200, 0.35);
+    }
+
+    .neo-raised-pill {
+      background: #ebf1f8;
+      box-shadow:
+        -3px -3px 8px rgba(255, 255, 255, 0.9),
+        3px 3px 8px rgba(166, 180, 200, 0.35);
+    }
+
+    /* Inset/Depressed Neomorphic Inputs */
+    .neo-inset {
+      background: #e5edf6;
+      box-shadow:
+        inset 3px 3px 6px rgba(166, 180, 200, 0.45),
+        inset -3px -3px 6px rgba(255, 255, 255, 0.9);
+    }
+
+    /* Interactive Buttons */
+    .neo-button-interactive {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .neo-button-interactive:hover {
+      box-shadow:
+        -2px -2px 6px rgba(255, 255, 255, 0.9),
+        2px 2px 6px rgba(166, 180, 200, 0.3);
+      transform: translateY(1px);
+    }
+
+    .neo-button-interactive:active {
+      box-shadow:
+        inset 2px 2px 5px rgba(166, 180, 200, 0.45),
+        inset -2px -2px 5px rgba(255, 255, 255, 0.9);
+      transform: translateY(2px);
+    }
+
+    /* Vibrant Gradient Buttons */
+    .neo-gradient-btn {
+      background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+      box-shadow:
+        -4px -4px 12px rgba(255, 255, 255, 0.8),
+        5px 6px 16px rgba(79, 70, 229, 0.35);
+    }
+
+    .neo-gradient-btn:hover {
+      background: linear-gradient(135deg, #4338ca 0%, #2563eb 100%);
+      box-shadow:
+        -2px -2px 6px rgba(255, 255, 255, 0.8),
+        3px 4px 10px rgba(79, 70, 229, 0.4);
+    }
+
+    .neo-primary-btn {
+      background: linear-gradient(135deg, #5b5ff5 0%, #4648d8 100%);
+      box-shadow: 5px 5px 14px rgba(79, 70, 229, 0.35), -4px -4px 12px #ffffff;
+      transition: all 0.2s ease;
+    }
+
+    .neo-primary-btn:hover {
+      background: linear-gradient(135deg, #5256ec 0%, #3e40cf 100%);
+      box-shadow: 3px 3px 8px rgba(79, 70, 229, 0.4), -2px -2px 8px #ffffff;
+    }
+
+    .neo-icon-btn {
+      background: #ebf1f8;
+      box-shadow: 4px 4px 9px #d2dae7, -4px -4px 9px #ffffff;
+      transition: all 0.2s ease;
+    }
+
+    .neo-icon-btn:hover {
+      color: #4f46e5;
+      box-shadow: 2px 2px 5px #d2dae7, -2px -2px 5px #ffffff;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+
+  <script>
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(function (p) { p.classList.add('hidden'); });
+      document.querySelectorAll('.nav-btn').forEach(function (b) {
+        b.classList.remove('active', 'neu-nav-active');
+        b.classList.add('text-slate-500');
+      });
+      var target = document.getElementById(pageId);
+      if (target) target.classList.remove('hidden');
+      var activeBtn = document.querySelector('.nav-btn[data-page="' + pageId + '"]');
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'neu-nav-active');
+        activeBtn.classList.remove('text-slate-500');
+      }
+      var sidebar = document.getElementById('sidebar');
+      var backdrop = document.getElementById('sidebarBackdrop');
+      if (sidebar && !sidebar.classList.contains('-translate-x-full')) {
+        sidebar.classList.add('-translate-x-full');
+        if (backdrop) backdrop.classList.add('hidden');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function openBookingChoiceModal() {
+      var m = document.getElementById('bookingChoiceModal');
+      if (m) m.classList.remove('hidden');
+    }
+    function closeBookingChoiceModal() {
+      var m = document.getElementById('bookingChoiceModal');
+      if (m) m.classList.add('hidden');
+    }
+    function toggleMobileMenu() {
+      var sidebar = document.getElementById('sidebar');
+      var backdrop = document.getElementById('sidebarBackdrop');
+      if (sidebar && backdrop) {
+        backdrop.classList.remove('hidden');
+        setTimeout(function () {
+          backdrop.classList.remove('opacity-0');
+          sidebar.classList.remove('-translate-x-full');
+        }, 10);
+      }
+    }
+  </script>
+</head>
+
+<body class="min-h-screen p-3 sm:p-4 lg:p-6 select-none antialiased">
+
+  <div class="max-w-[1536px] mx-auto flex flex-col xl:flex-row gap-6">
+
+    <!-- Mobile Header Bar -->
+    <header class="xl:hidden flex items-center justify-between px-4 py-3 neu-flat rounded-2xl sticky top-0 z-30 mb-2">
+      <div class="flex items-center gap-3">
+        <button id="mobileMenuBtn" class="p-2 text-slate-600 hover:text-slate-900 rounded-lg focus:outline-none"
+          onclick="toggleMobileMenu()">
+          <svg class="w-6 h-6 stroke-current stroke-2 fill-none" viewBox="0 0 24 24">
+            <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </button>
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-xl neu-flat flex items-center justify-center text-blue-500">
+            <svg class="w-5 h-5 stroke-current stroke-2 fill-none" viewBox="0 0 24 24">
+              <path d="M3 12h3l3-7 4 14 3-7h5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <span class="font-bold text-slate-800 text-lg">MediCare</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="relative w-9 h-9 rounded-full neu-flat flex items-center justify-center text-slate-500"
+          onclick="showPage('notifications')">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full"></span>
+        </button>
+        <div
+          class="w-8 h-8 rounded-full bg-blue-500 text-white font-bold flex items-center justify-center text-xs shadow-inner">
+          JS
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div id="sidebarBackdrop"
+      class="fixed inset-0 bg-slate-900/40 z-40 hidden xl:hidden backdrop-blur-sm transition-opacity duration-300 opacity-0"
+      onclick="var s = document.getElementById('sidebar'); if(s) s.classList.add('-translate-x-full'); this.classList.add('hidden');">
+    </div>
+
+    <!-- BEGIN: LeftSidebar (Template 1 Navigation) -->
+    <aside id="sidebar"
+      class="w-64 flex-shrink-0 flex flex-col justify-between fixed xl:sticky top-0 left-0 z-50 h-screen xl:h-auto bg-[#ebf1f8] p-5 xl:p-0 transition-transform duration-300 ease-in-out -translate-x-full xl:translate-x-0 overflow-y-auto hide-scrollbar"
+      data-purpose="sidebar-navigation">
+      <div>
+        <!-- Logo & Header -->
+        <div class="flex items-center gap-3.5 px-4 mb-8">
+          <div class="w-12 h-12 rounded-2xl neu-flat flex items-center justify-center text-blue-500 shadow-lg">
+            <svg class="w-6 h-6 stroke-current stroke-2 fill-none" viewBox="0 0 24 24">
+              <path d="M3 12h3l3-7 4 14 3-7h5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold tracking-tight text-slate-800 leading-none">MediCare</h1>
+            <p class="text-xs text-slate-400 font-medium mt-1">Patient Care Portal</p>
+          </div>
+        </div>
+
+        <!-- User Quick Profile Card -->
+        <div class="neu-flat rounded-2xl p-3 flex items-center gap-3.5 mx-1 mb-6">
+          <div
+            class="w-10 h-10 rounded-full bg-blue-500 text-white font-bold text-xs flex items-center justify-center shadow-inner">
+            JS
+          </div>
+          <div class="min-w-0 flex-1">
+            <h2 class="text-xs font-bold text-slate-800 truncate">Jane Sharma</h2>
+            <p class="text-[10px] font-medium text-slate-400">Patient ID: #PAT-8821</p>
+          </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="space-y-2.5">
+          <!-- Home / Dashboard -->
+          <button
+            class="nav-btn active neu-nav-active w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl font-semibold text-sm transition-colors text-left"
+            data-page="dashboard" onclick="showPage('dashboard')">
+            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            </svg>
+            <span>Home</span>
+          </button>
+
+          <!-- Appointments -->
+          <button
+            class="nav-btn w-full flex items-center justify-between px-4 py-3 rounded-2xl text-slate-500 hover:text-slate-800 font-medium text-sm transition-all duration-200 text-left"
+            data-page="appointments" onclick="showPage('appointments')">
+            <div class="flex items-center gap-3.5">
+              <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+              </svg>
+              <span>Appointments</span>
+            </div>
+            <span id="apptCountBadge"
+              class="w-5 h-5 rounded-full neu-flat-sm text-xs font-bold text-slate-600 flex items-center justify-center">2</span>
+          </button>
+
+          <!-- Medical Records -->
+          <button
+            class="nav-btn w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-slate-500 hover:text-slate-800 font-medium text-sm transition-all duration-200 text-left"
+            data-page="records" onclick="showPage('records')">
+            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            </svg>
+            <span>Medical Records</span>
+          </button>
+
+          <!-- Notifications with Badge -->
+          <button
+            class="nav-btn w-full flex items-center justify-between px-4 py-3 rounded-2xl text-slate-500 hover:text-slate-800 font-medium text-sm transition-all duration-200 text-left"
+            data-page="notifications" onclick="showPage('notifications')">
+            <div class="flex items-center gap-3.5">
+              <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+              </svg>
+              <span>Notifications</span>
+            </div>
+            <span
+              class="w-5 h-5 rounded-full bg-rose-500 text-white text-xs font-bold flex items-center justify-center shadow-sm">3</span>
+          </button>
+
+          <!-- Settings -->
+          <button
+            class="nav-btn w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-slate-500 hover:text-slate-800 font-medium text-sm transition-all duration-200 text-left"
+            data-page="settings" onclick="showPage('settings')">
+            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+              <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2"></path>
+            </svg>
+            <span>Settings</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Bottom Card & Logout -->
+      <div class="space-y-4 pt-6">
+        <!-- Better Health Promotion Card -->
+        <div class="neu-flat p-4 rounded-3xl relative overflow-hidden flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 rounded-2xl bg-emerald-100/60 flex items-center justify-center text-emerald-500 shadow-inner">
+              <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24">
+                <path
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-slate-800">Better Health</h4>
+              <p class="text-[10px] text-slate-400">Brighter Tomorrow</p>
+            </div>
+          </div>
+          <button aria-label="Learn More"
+            class="w-8 h-8 rounded-full bg-blue-100/60 flex items-center justify-center text-blue-600 neu-flat-sm hover:scale-105 transition-transform"
+            onclick="alert('MediCare AI Care Assistant: Available 24/7 for preventive wellness.')">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5">
+              </path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Log Out Button -->
+        <a href="/login.html" onclick="localStorage.removeItem('patient_authenticated');"
+          class="w-full neu-button py-3 px-4 rounded-2xl flex items-center gap-3 text-slate-500 font-semibold text-sm hover:text-rose-600 transition-colors">
+          <svg class="w-5 h-5 text-slate-400 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Log Out</span>
+        </a>
+      </div>
+    </aside>
+    <!-- END: LeftSidebar -->
+
+    <!-- BEGIN: MainContentArea -->
+    <main class="flex-1 flex flex-col gap-6 overflow-hidden" data-purpose="dashboard-main">
+
+      <!-- BEGIN: TopBar (Template 1) -->
+      <header class="hidden xl:flex items-center justify-between gap-4" data-purpose="top-navigation-bar">
+        <!-- Search Input with Inset Neumorphic effect -->
+        <div class="neu-inset px-4 py-2.5 rounded-full flex items-center gap-3 w-full max-w-lg">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round"
+              stroke-width="2"></path>
+          </svg>
+          <input id="globalSearch"
+            class="bg-transparent border-none text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-0 w-full p-0"
+            placeholder="Search appointments, doctors, records..." type="text" />
+        </div>
+
+        <!-- User Profile & Notifications -->
+        <div class="flex items-center gap-4">
+          <!-- Notification Bell -->
+          <button aria-label="Notifications" onclick="showPage('notifications')"
+            class="w-11 h-11 rounded-full neu-flat flex items-center justify-center text-slate-600 relative hover:scale-105 transition-transform cursor-pointer">
+            <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            </svg>
+            <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-[#ebf1f8]"></span>
+          </button>
+
+          <!-- User Profile Pill -->
+          <div onclick="showPage('settings')"
+            class="neu-flat pl-2 pr-4 py-1.5 rounded-full flex items-center gap-3 cursor-pointer hover:shadow-md transition-shadow">
+            <div
+              class="w-8 h-8 rounded-full bg-blue-500 text-white font-bold flex items-center justify-center text-xs shadow-inner">
+              JS
+            </div>
+            <div class="text-left hidden sm:block">
+              <div class="text-xs font-bold text-slate-800 leading-tight">Jane Sharma</div>
+              <div class="text-[10px] text-slate-400 font-medium">Patient</div>
+            </div>
+            <svg class="w-4 h-4 text-slate-400 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            </svg>
+          </div>
+        </div>
+      </header>
+      <!-- END: TopBar -->
+
+      <!-- ========================================================================= -->
+      <!-- PAGE 1: DASHBOARD (Template 1)                                            -->
+      <!-- ========================================================================= -->
+      <div id="dashboard" class="page space-y-6">
+        <!-- BEGIN: TopSectionGrid -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6" data-purpose="primary-stats-and-actions">
+          <!-- Welcome & Quick Actions Card (4 cols) -->
+          <div class="lg:col-span-4 neu-flat rounded-3xl p-6 flex flex-col justify-between"
+            data-purpose="welcome-banner">
+            <div>
+              <div class="flex items-start justify-between">
+                <div>
+                  <p class="text-sm font-semibold text-slate-400">Good day,</p>
+                  <div class="flex items-center gap-2 mt-0.5">
+                    <h2 class="text-2xl font-black text-slate-800">Jane</h2>
+                    <span class="text-2xl">👋</span>
+                  </div>
+                  <p class="text-xs text-slate-400 mt-2 italic font-normal leading-relaxed">"Take care of your health
+                    today for a brighter tomorrow."</p>
+                </div>
+                <!-- Avatar Illustration with Online Indicator -->
+                <div class="relative w-16 h-16 rounded-full neu-flat flex items-center justify-center p-1">
+                  <div
+                    class="w-full h-full rounded-full bg-gradient-to-tr from-indigo-200 to-purple-100 flex items-center justify-center overflow-hidden">
+                    <span class="text-3xl">👩🏻</span>
+                  </div>
+                  <span class="absolute top-0 right-1 w-3 h-3 bg-emerald-500 rounded-full ring-2 ring-[#ebf1f8]"></span>
+                </div>
+              </div>
+
+              <!-- Quick Action 2x2 Grid -->
+              <div class="grid grid-cols-2 gap-3.5 mt-6">
+                <!-- AI Voice Intake -->
+                <a href="/intake/" id="heroVoiceIntakeBtn"
+                  class="neu-button p-4 rounded-2xl flex flex-col items-center justify-center text-center gap-2 bg-[#ebf1f8] group">
+                  <div
+                    class="w-10 h-10 rounded-full neu-inset flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                  </div>
+                  <span class="text-xs font-semibold text-slate-700">AI Voice Intake</span>
+                </a>
+
+                <!-- Book Appointment -->
+                <button id="heroBookApptBtn" onclick="showPage('appointments')"
+                  class="neu-button p-4 rounded-2xl flex flex-col items-center justify-center text-center gap-2 bg-[#ebf1f8] group">
+                  <div
+                    class="w-10 h-10 rounded-full neu-inset flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                  </div>
+                  <span class="text-xs font-semibold text-slate-700">Book Appointment</span>
+                </button>
+
+                <!-- Upload Prescriptions -->
+                <button onclick="showPage('records')"
+                  class="neu-button p-4 rounded-2xl flex flex-col items-center justify-center text-center gap-2 bg-[#ebf1f8] group">
+                  <div
+                    class="w-10 h-10 rounded-full neu-inset flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                  </div>
+                  <span class="text-xs font-semibold text-slate-700">Upload Prescriptions</span>
+                </button>
+
+                <!-- Add More -->
+                <button onclick="openBookingChoiceModal()"
+                  class="neu-button p-4 rounded-2xl flex flex-col items-center justify-center text-center gap-2 bg-[#ebf1f8] group">
+                  <div
+                    class="w-10 h-10 rounded-full neu-inset flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+                    </svg>
+                  </div>
+                  <span class="text-xs font-semibold text-slate-700">Add More</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Health Overview (5 cols) -->
+          <div class="lg:col-span-5 neu-flat rounded-3xl p-6" data-purpose="health-metrics-overview">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="text-base font-bold text-slate-800">Health Overview</h3>
+                <p class="text-xs text-slate-400 font-medium">Your key health metrics</p>
+              </div>
+            </div>
+            <!-- Metrics 4-Row Cards -->
+            <div class="space-y-3.5">
+              <!-- Heart Rate -->
+              <div class="neu-flat-sm p-3.5 rounded-2xl flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl neu-flat flex items-center justify-center text-rose-500">
+                    <svg class="w-5 h-5 fill-rose-50 stroke-rose-500" viewBox="0 0 24 24">
+                      <path
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="text-[11px] text-slate-400 font-medium leading-none">Heart Rate</div>
+                    <div class="text-base font-bold text-slate-800 mt-1">72 <span
+                        class="text-xs font-medium text-slate-400">bpm</span></div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span
+                    class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-600 flex items-center gap-0.5">
+                    ↑ 2%
+                  </span>
+                  <svg class="w-16 h-6 stroke-rose-400 fill-none" viewBox="0 0 60 20">
+                    <path d="M 0 12 Q 10 5, 20 13 T 40 8 T 60 11" stroke-linecap="round" stroke-width="2"></path>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Blood Pressure -->
+              <div class="neu-flat-sm p-3.5 rounded-2xl flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl neu-flat flex items-center justify-center text-blue-500">
+                    <svg class="w-5 h-5 stroke-current fill-none" viewBox="0 0 24 24">
+                      <path d="M3 12h4l3-6 4 12 3-6h4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                      </path>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="text-[11px] text-slate-400 font-medium leading-none">Blood Pressure</div>
+                    <div class="text-base font-bold text-slate-800 mt-1">120/80 <span
+                        class="text-xs font-medium text-slate-400">mmHg</span></div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <svg class="w-16 h-6 stroke-blue-400 fill-none" viewBox="0 0 60 20">
+                    <path d="M 0 10 Q 15 3, 30 14 T 60 7" stroke-linecap="round" stroke-width="2"></path>
+                  </svg>
+                  <span class="neu-inset px-2.5 py-1 rounded-full text-[10px] font-semibold text-slate-500">
+                    Normal
+                  </span>
+                </div>
+              </div>
+
+              <!-- Blood Sugar -->
+              <div class="neu-flat-sm p-3.5 rounded-2xl flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl neu-flat flex items-center justify-center text-emerald-500">
+                    <svg class="w-5 h-5 stroke-current fill-none" viewBox="0 0 24 24">
+                      <path
+                        d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="text-[11px] text-slate-400 font-medium leading-none">Blood Sugar</div>
+                    <div class="text-base font-bold text-slate-800 mt-1">95 <span
+                        class="text-xs font-medium text-slate-400">mg/dL</span></div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <svg class="w-16 h-6 stroke-emerald-400 fill-none" viewBox="0 0 60 20">
+                    <path d="M 0 14 Q 15 6, 30 11 T 60 9" stroke-linecap="round" stroke-width="2"></path>
+                  </svg>
+                  <span class="neu-inset px-2.5 py-1 rounded-full text-[10px] font-semibold text-slate-500">
+                    Normal
+                  </span>
+                </div>
+              </div>
+
+              <!-- Weight -->
+              <div class="neu-flat-sm p-3.5 rounded-2xl flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl neu-flat flex items-center justify-center text-amber-500">
+                    <svg class="w-5 h-5 stroke-current fill-none" viewBox="0 0 24 24">
+                      <path
+                        d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="text-[11px] text-slate-400 font-medium leading-none">Weight</div>
+                    <div class="text-base font-bold text-slate-800 mt-1">68 <span
+                        class="text-xs font-medium text-slate-400">kg</span></div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <svg class="w-16 h-6 stroke-amber-400 fill-none" viewBox="0 0 60 20">
+                    <path d="M 0 13 Q 15 15, 30 9 T 60 12" stroke-linecap="round" stroke-width="2"></path>
+                  </svg>
+                  <span class="neu-inset px-2.5 py-1 rounded-full text-[10px] font-semibold text-slate-500">
+                    No change
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Today's Health Condition (3 cols) -->
+          <div class="lg:col-span-3 neu-flat rounded-3xl p-6 flex flex-col items-center justify-between text-center"
+            data-purpose="health-score-gauge">
+            <div class="w-full text-left">
+              <h3 class="text-base font-bold text-slate-800">Today's Health Condition</h3>
+              <p class="text-xs text-slate-400 font-medium">How are you feeling today?</p>
+            </div>
+            <!-- Circular Gauge -->
+            <div class="my-4">
+              <div class="w-36 h-36 circular-gauge relative">
+                <div class="circular-gauge-inner flex flex-col items-center justify-center text-center">
+                  <!-- Smiling Face Icon -->
+                  <svg class="w-10 h-10 text-slate-400 mb-1 stroke-current fill-none" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" stroke-width="2"></circle>
+                    <path d="M8 14s1.5 2 4 2 4-2 4-2" stroke-linecap="round" stroke-width="2"></path>
+                    <line stroke-linecap="round" stroke-width="3" x1="9" x2="9.01" y1="9" y2="9"></line>
+                    <line stroke-linecap="round" stroke-width="3" x1="15" x2="15.01" y1="9" y2="9"></line>
+                  </svg>
+                </div>
+              </div>
+              <div class="mt-4">
+                <div class="text-lg font-bold text-slate-800">Good</div>
+                <p class="text-xs text-slate-400 mt-0.5">Keep it up! You're doing well.</p>
+              </div>
+            </div>
+            <!-- Log Today's Status Action -->
+            <button onclick="alert('Health status logged as Good for today!')"
+              class="w-full neu-button py-3 px-4 rounded-2xl text-blue-600 font-bold text-xs flex items-center justify-center gap-2 hover:bg-blue-50/40 transition-colors">
+              <div class="w-5 h-5 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-sm">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+                </svg>
+              </div>
+              <span>Log Today's Status</span>
+            </button>
+          </div>
+        </section>
+        <!-- END: TopSectionGrid -->
+
+        <!-- BEGIN: BottomSectionGrid -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6" data-purpose="secondary-activity-and-actions">
+          <!-- Upcoming Appointments (4 cols) -->
+          <div class="lg:col-span-4 neu-flat rounded-3xl p-6 flex flex-col justify-between"
+            data-purpose="upcoming-appointments-list">
+            <div>
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-base font-bold text-slate-800">Upcoming Appointments</h3>
+                <button onclick="showPage('appointments')"
+                  class="text-xs font-semibold text-blue-500 hover:underline flex items-center gap-1">
+                  View All <span>→</span>
+                </button>
+              </div>
+              <!-- Dynamic appointments injected by app.js -->
+              <div id="dashboardApptsList" class="space-y-3.5">
+                <!-- Dr. Priya Sharma -->
+                <div class="neu-flat-sm p-3.5 rounded-2xl flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl neu-inset flex flex-col items-center justify-center text-center">
+                      <span class="text-[9px] uppercase font-bold text-slate-400 tracking-wider">SEP</span>
+                      <span class="text-sm font-extrabold text-blue-600 leading-none">12</span>
+                      <span class="text-[8px] font-semibold text-slate-400">Fri</span>
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-full neu-flat flex items-center justify-center text-xs">👩🏻‍⚕️
+                        </div>
+                        <div class="text-xs font-bold text-slate-800">Dr. Priya Sharma</div>
+                      </div>
+                      <div class="text-[11px] text-slate-400 mt-1">General Medicine</div>
+                      <div class="flex items-center gap-2 mt-1 text-[10px] text-slate-500 font-medium">
+                        <span>🕒 10:30 AM</span>
+                        <span>📍 OPD Room 102</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button onclick="showPage('appointments')" aria-label="Appointment details"
+                    class="w-7 h-7 rounded-full neu-flat flex items-center justify-center text-slate-400 hover:text-blue-500 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Dr. Rahul Mehta -->
+                <div class="neu-flat-sm p-3.5 rounded-2xl flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl neu-inset flex flex-col items-center justify-center text-center">
+                      <span class="text-[9px] uppercase font-bold text-slate-400 tracking-wider">SEP</span>
+                      <span class="text-sm font-extrabold text-blue-600 leading-none">15</span>
+                      <span class="text-[8px] font-semibold text-slate-400">Mon</span>
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-full neu-flat flex items-center justify-center text-xs">👨🏻‍⚕️
+                        </div>
+                        <div class="text-xs font-bold text-slate-800">Dr. Rahul Mehta</div>
+                      </div>
+                      <div class="text-[11px] text-slate-400 mt-1">Orthopedics</div>
+                      <div class="flex items-center gap-2 mt-1 text-[10px] text-slate-500 font-medium">
+                        <span>🕒 02:00 PM</span>
+                        <span>📍 OPD Room 204</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button onclick="showPage('appointments')" aria-label="Appointment details"
+                    class="w-7 h-7 rounded-full neu-flat flex items-center justify-center text-slate-400 hover:text-blue-500 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Medical Activity Stream (5 cols) -->
+          <div class="lg:col-span-5 neu-flat rounded-3xl p-6" data-purpose="medical-activity-timeline">
+            <div class="flex items-center justify-between mb-5">
+              <h3 class="text-base font-bold text-slate-800">Medical Activity Stream</h3>
+              <button onclick="showPage('records')"
+                class="text-xs font-semibold text-blue-500 hover:underline flex items-center gap-1">
+                View All <span>→</span>
+              </button>
+            </div>
+            <!-- Timeline Items -->
+            <div
+              class="space-y-4 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+              <!-- Event 1 -->
+              <div class="flex items-center justify-between relative pl-8">
+                <span
+                  class="absolute left-1.5 top-1.5 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-emerald-500 ring-4 ring-[#ebf1f8]"></span>
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-xl neu-flat flex items-center justify-center text-emerald-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold text-slate-800">Prescription Added</div>
+                    <div class="text-[11px] text-slate-400">Paracetamol 500mg (NIH Checked)</div>
+                  </div>
+                </div>
+                <span class="text-[10px] font-medium text-slate-400">2 hours ago</span>
+              </div>
+
+              <!-- Event 2 -->
+              <div class="flex items-center justify-between relative pl-8">
+                <span
+                  class="absolute left-1.5 top-1.5 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-rose-500 ring-4 ring-[#ebf1f8]"></span>
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-xl neu-flat flex items-center justify-center text-rose-500">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold text-slate-800">Lab Report Uploaded</div>
+                    <div class="text-[11px] text-slate-400">CBC Report (OCR processed)</div>
+                  </div>
+                </div>
+                <span class="text-[10px] font-medium text-slate-400">Yesterday</span>
+              </div>
+
+              <!-- Event 3 -->
+              <div class="flex items-center justify-between relative pl-8">
+                <span
+                  class="absolute left-1.5 top-1.5 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-blue-500 ring-4 ring-[#ebf1f8]"></span>
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-xl neu-flat flex items-center justify-center text-blue-500">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold text-slate-800">Appointment Completed</div>
+                    <div class="text-[11px] text-slate-400">Dr. Rahul Mehta (Orthopedics)</div>
+                  </div>
+                </div>
+                <span class="text-[10px] font-medium text-slate-400">5 Sep 2026</span>
+              </div>
+
+              <!-- Event 4 -->
+              <div class="flex items-center justify-between relative pl-8">
+                <span
+                  class="absolute left-1.5 top-1.5 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-purple-500 ring-4 ring-[#ebf1f8]"></span>
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-xl neu-flat flex items-center justify-center text-purple-500">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold text-slate-800">Profile Updated</div>
+                    <div class="text-[11px] text-slate-400">Medical history updated</div>
+                  </div>
+                </div>
+                <span class="text-[10px] font-medium text-slate-400">3 Sep 2026</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions Grid (3 cols) -->
+          <div class="lg:col-span-3 neu-flat rounded-3xl p-6 flex flex-col justify-between"
+            data-purpose="quick-actions-grid">
+            <div>
+              <h3 class="text-base font-bold text-slate-800 mb-4">Quick Actions</h3>
+              <div class="grid grid-cols-2 gap-3.5">
+                <!-- Find a Doctor -->
+                <button onclick="showPage('appointments')"
+                  class="neu-button p-4 rounded-2xl flex flex-col items-center justify-center text-center gap-2 group">
+                  <div
+                    class="w-11 h-11 rounded-2xl neu-inset flex items-center justify-center text-blue-500 group-hover:scale-105 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                  </div>
+                  <span class="text-[11px] font-semibold text-slate-700">Find a Doctor</span>
+                </button>
+
+                <!-- Book Lab Test -->
+                <button onclick="showPage('records')"
+                  class="neu-button p-4 rounded-2xl flex flex-col items-center justify-center text-center gap-2 group">
+                  <div
+                    class="w-11 h-11 rounded-2xl neu-inset flex items-center justify-center text-rose-400 group-hover:scale-105 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                  </div>
+                  <span class="text-[11px] font-semibold text-slate-700">Book Lab Test</span>
+                </button>
+
+                <!-- View Reports -->
+                <button onclick="showPage('records')"
+                  class="neu-button p-4 rounded-2xl flex flex-col items-center justify-center text-center gap-2 group">
+                  <div
+                    class="w-11 h-11 rounded-2xl neu-inset flex items-center justify-center text-blue-500 group-hover:scale-105 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                  </div>
+                  <span class="text-[11px] font-semibold text-slate-700">View Reports</span>
+                </button>
+
+                <!-- Order Medicines -->
+                <button
+                  onclick="alert('Digital Prescription pharmacy sync: Prescribed meds can be fulfilled via nearby dispensary.')"
+                  class="neu-button p-4 rounded-2xl flex flex-col items-center justify-center text-center gap-2 group">
+                  <div
+                    class="w-11 h-11 rounded-2xl neu-inset flex items-center justify-center text-purple-500 group-hover:scale-105 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                  </div>
+                  <span class="text-[11px] font-semibold text-slate-700">Order Medicines</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- END: BottomSectionGrid -->
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- PAGE 2: APPOINTMENTS & TOKEN QUEUE (Template 2)                           -->
+      <!-- ========================================================================= -->
+      <div id="appointments" class="page hidden space-y-6">
+        <!-- Banner: Appointments & Token Queue -->
+        <section
+          class="p-6 sm:p-7 rounded-3xl neo-raised flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden"
+          data-purpose="banner-header">
+          <div class="flex items-start sm:items-center gap-4 z-10">
+            <div class="w-14 h-14 rounded-2xl neo-raised flex items-center justify-center text-blue-600 shrink-0">
+              <svg class="w-7 h-7 stroke-current stroke-[2]" fill="none" viewBox="0 0 24 24">
+                <path
+                  d="M6.75 3v2.25M17.25 3v2.253M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
+                  stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M12 12.75v3.75m-1.875-1.875h3.75" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-3">
+                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Appointments & Token Queue
+                </h2>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-500 font-medium mt-1">Book new consultations, review queue tokens,
+                or schedule 3-day follow-ups.</p>
+            </div>
+          </div>
+
+          <!-- Decorative script & Action Button -->
+          <div class="flex items-center gap-5 z-10 self-start md:self-auto">
+            <div
+              class="hidden xl:flex items-center gap-1 font-script text-2xl font-bold text-indigo-400 rotate-[-4deg]">
+              <span>Your Health Matters</span>
+              <span class="text-xl">♡</span>
+            </div>
+            <button id="openIntakeModalBtn" onclick="openBookingChoiceModal()"
+              class="px-5 py-3 rounded-2xl neo-gradient-btn text-white font-bold text-xs sm:text-sm flex items-center gap-2 neo-button-interactive tracking-wide cursor-pointer"
+              type="button">
+              <svg class="w-4 h-4 stroke-current stroke-[2.2]" fill="none" viewBox="0 0 24 24">
+                <path
+                  d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"
+                  stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <span>Book Consultation (Voice / Form)</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Main Columns Layout -->
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+          <!-- Left Column: Quick Standard Booking -->
+          <div class="xl:col-span-5 p-6 rounded-3xl neo-raised flex flex-col justify-between"
+            data-purpose="quick-booking-card">
+            <div>
+              <!-- Card Header -->
+              <div class="flex items-center gap-3.5 mb-6">
+                <div class="w-11 h-11 rounded-2xl neo-raised-sm flex items-center justify-center text-blue-600">
+                  <svg class="w-5 h-5 stroke-current stroke-[2]" fill="none" viewBox="0 0 24 24">
+                    <path
+                      d="M6.75 3v2.25M17.25 3v2.253M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
+                      stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M13 10l-3 4h4l-2 4" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Quick Standard Booking</h3>
+                  <p class="text-xs text-slate-500 font-medium">Schedule a new appointment in a few steps.</p>
+                </div>
+              </div>
+
+              <!-- Booking Form -->
+              <form id="quickAppointmentForm" class="space-y-4">
+                <!-- Field: Medical Specialty -->
+                <div>
+                  <label for="specialty" class="block text-xs font-bold text-slate-700 mb-1.5">Medical Specialty</label>
+                  <div class="relative flex items-center">
+                    <span class="absolute left-3.5 text-blue-600 pointer-events-none">
+                      <svg class="w-4 h-4 stroke-current stroke-[2]" fill="none" viewBox="0 0 24 24">
+                        <path
+                          d="M8 3v4a4 4 0 008 0V3m-8 7a7 7 0 0014 0V9a2 2 0 00-2-2h-1M5 7H4a2 2 0 00-2 2v1a7 7 0 0013.9 1.2"
+                          stroke-linecap="round" stroke-linejoin="round"></path>
+                      </svg>
+                    </span>
+                    <select id="specialty" required
+                      class="w-full py-2.5 pl-10 pr-9 rounded-2xl neo-inset border-none text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-blue-400/40 focus:outline-none appearance-none cursor-pointer">
+                      <option value="General Medicine">General Medicine</option>
+                      <option value="Cardiology">Cardiology</option>
+                      <option value="Orthopedics">Orthopedics</option>
+                      <option value="Pediatrics">Pediatrics</option>
+                      <option value="Dermatology">Dermatology</option>
+                      <option value="Neurology">Neurology</option>
+                    </select>
+                    <span class="absolute right-3.5 text-slate-400 pointer-events-none">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path d="M19.5 8.25l-7.5 7.5-7.5-7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Fields Row: Date and Time Slot -->
+                <div class="grid grid-cols-2 gap-3">
+                  <!-- Date -->
+                  <div>
+                    <label for="appointmentDate" class="block text-xs font-bold text-slate-700 mb-1.5">Date</label>
+                    <div class="relative flex items-center">
+                      <input id="appointmentDate" required
+                        class="w-full py-2.5 px-3 rounded-2xl neo-inset border-none text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-blue-400/40 focus:outline-none"
+                        type="date" />
+                    </div>
+                  </div>
+
+                  <!-- Time Slot -->
+                  <div>
+                    <label for="appointmentTime" class="block text-xs font-bold text-slate-700 mb-1.5">Time Slot</label>
+                    <div class="relative flex items-center">
+                      <select id="appointmentTime" required
+                        class="w-full py-2.5 px-3 rounded-2xl neo-inset border-none text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-blue-400/40 focus:outline-none appearance-none cursor-pointer">
+                        <option value="10:00 AM">10:00 AM</option>
+                        <option value="11:30 AM">11:30 AM</option>
+                        <option value="02:00 PM">02:00 PM</option>
+                        <option value="04:15 PM">04:15 PM</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Reason for Visit -->
+                <div>
+                  <label for="appointmentReason" class="block text-xs font-bold text-slate-700 mb-1.5">Reason for
+                    Visit</label>
+                  <div class="relative flex items-start">
+                    <span class="absolute top-3 left-3.5 text-slate-400 pointer-events-none">
+                      <svg class="w-4 h-4 stroke-current stroke-[2]" fill="none" viewBox="0 0 24 24">
+                        <path
+                          d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+                          stroke-linecap="round" stroke-linejoin="round"></path>
+                      </svg>
+                    </span>
+                    <input id="appointmentReason" required
+                      class="w-full py-2.5 pl-10 pr-4 rounded-2xl neo-inset border-none text-xs font-medium text-slate-700 placeholder-slate-400 focus:ring-2 focus:ring-blue-400/40 focus:outline-none"
+                      placeholder="Describe symptoms or routine checkup reason..." type="text" />
+                  </div>
+                </div>
+
+                <!-- Confirm & Generate Token CTA -->
+                <div class="pt-2">
+                  <button type="submit"
+                    class="w-full py-3.5 rounded-2xl neo-gradient-btn text-white font-bold text-sm flex items-center justify-center gap-2 neo-button-interactive cursor-pointer">
+                    <div class="w-5 h-5 rounded-full border border-white/80 flex items-center justify-center">
+                      <svg class="w-3 h-3 stroke-current stroke-[3]" fill="none" viewBox="0 0 24 24">
+                        <path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                      </svg>
+                    </div>
+                    <span>Confirm & Generate Token</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Bottom Alert Info Box -->
+            <div class="mt-5 p-3.5 rounded-2xl neo-raised-sm flex items-center gap-3">
+              <div class="w-7 h-7 rounded-xl bg-blue-500/10 text-blue-600 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4 stroke-current stroke-[2.2]" fill="none" viewBox="0 0 24 24">
+                  <path
+                    d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
+                    stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+              <p class="text-xs text-slate-500 font-medium leading-relaxed">
+                You will receive a token and confirmation once your appointment is scheduled.
+              </p>
+            </div>
+          </div>
+
+          <!-- Right Column: Your Active Appointments & Tokens -->
+          <div class="xl:col-span-7 p-6 rounded-3xl neo-raised space-y-5" data-purpose="active-appointments-card">
+            <!-- Card Header & Schedule Revisit Button -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-2xl neo-raised-sm flex items-center justify-center text-blue-600">
+                  <svg class="w-5 h-5 stroke-current stroke-[2]" fill="none" viewBox="0 0 24 24">
+                    <path
+                      d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm0 5.25h.007v.008H3.75V12zm0 5.25h.007v.008H3.75v-.008z"
+                      stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Your Active Appointments & Tokens
+                  </h3>
+                  <p class="text-xs text-slate-500 font-medium">View, manage or reschedule your upcoming consultations.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Revisit Button -->
+              <button id="quickRevisitTriggerBtn"
+                class="px-4 py-2.5 rounded-2xl neo-raised flex items-center gap-2 text-amber-700 bg-amber-50/50 font-bold text-xs neo-button-interactive self-start sm:self-auto border border-amber-200/50 cursor-pointer"
+                type="button">
+                <svg class="w-4 h-4 text-amber-600 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                    stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <span>Schedule 3-Day Revisit</span>
+              </button>
+            </div>
+
+            <!-- Appointments List (Dynamic via app.js) -->
+            <div id="appointmentList" class="space-y-4">
+              <!-- Dynamic items loaded here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- BEGIN: BottomMotivationalBanner (Template 2) -->
+        <footer
+          class="p-5 sm:p-6 rounded-3xl neo-raised flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden relative"
+          data-purpose="wellness-banner">
+          <div class="flex items-center gap-4 z-10">
+            <div class="w-12 h-12 rounded-2xl neo-raised flex items-center justify-center text-blue-600 shrink-0">
+              <svg class="w-6 h-6 stroke-current stroke-[2]" fill="none" viewBox="0 0 24 24">
+                <path
+                  d="M6.75 3v2.25M17.25 3v2.253M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
+                  stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M12 12.75v3.75m-1.875-1.875h3.75" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">Small steps, healthier
+                tomorrows.</h4>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">Keep your appointments, stay consistent, and take
+                charge of your health.</p>
+            </div>
+          </div>
+
+          <!-- Decorative ECG Pulse Line & Heart Outline -->
+          <div class="flex items-center gap-6 z-10">
+            <div class="flex items-center gap-3">
+              <!-- ECG Pulse Wave -->
+              <svg class="w-24 h-10 text-indigo-400/80 stroke-current stroke-[2.5] fill-none" viewBox="0 0 100 40">
+                <path d="M0 20 L35 20 L40 10 L46 32 L54 4 L60 26 L65 20 L100 20" stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+              </svg>
+              <!-- Big Outline Heart -->
+              <svg class="w-14 h-14 text-indigo-400 stroke-current stroke-[2] fill-none -rotate-6" viewBox="0 0 24 24">
+                <path
+                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+                  stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+            <div
+              class="font-script text-xl font-bold text-indigo-400 rotate-[-5deg] leading-none text-right hidden sm:block">
+              Healthcare<br /><span class="text-base text-indigo-400/80">for a brighter you</span>
+            </div>
+          </div>
+        </footer>
+        <!-- END: BottomMotivationalBanner -->
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- PAGE 3: MEDICAL DOCUMENT VAULT (Template 4)                               -->
+      <!-- ========================================================================= -->
+      <div id="records" class="page hidden space-y-6">
+        <!-- BEGIN: Medical Document Vault Card Banner -->
+        <section
+          class="neo-raised rounded-3xl p-7 flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
+          data-purpose="banner-card">
+          <div class="flex items-center gap-5">
+            <!-- Vault Icon with Soft Inset/Neomorphic Frame -->
+            <div class="w-16 h-16 rounded-2xl neo-inset flex items-center justify-center text-indigo-600 flex-shrink-0">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" x2="8" y1="13" y2="13"></line>
+                <line x1="16" x2="8" y1="17" y2="17"></line>
+                <line x1="10" x2="8" y1="9" y2="9"></line>
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-slate-800">Medical Document Vault</h2>
+              <p class="text-sm font-normal text-slate-500 mt-1">Upload reports directly to Supabase Storage with
+                automatic Python OCR extraction.</p>
+            </div>
+          </div>
+
+          <!-- Upload to Cloud Action Button -->
+          <button id="addRecordBtn"
+            class="neo-primary-btn text-white px-6 py-3 rounded-2xl font-medium text-sm flex items-center gap-2.5 transition-transform cursor-pointer"
+            type="button">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+              stroke-width="2" viewBox="0 0 24 24">
+              <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+              <path d="M12 12v9"></path>
+              <path d="m16 16-4-4-4 4"></path>
+            </svg>
+            <span>Upload to Cloud</span>
+          </button>
+        </section>
+        <!-- END: Medical Document Vault Card Banner -->
+
+        <!-- Record Upload Form Container -->
+        <div id="recordFormContainer" class="hidden neo-raised rounded-3xl p-6 space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+            <h3 class="font-bold text-slate-800 text-base">Upload Document to Supabase Cloud</h3>
+            <button
+              class="w-8 h-8 rounded-full neo-button flex items-center justify-center text-slate-400 hover:text-slate-600 cursor-pointer"
+              onclick="document.getElementById('recordFormContainer').classList.add('hidden')">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <form id="recordForm" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="recordName" class="block text-xs font-semibold text-slate-700 mb-1">Document Title</label>
+                <input type="text" id="recordName" placeholder="e.g. Lipid Profile Lab Test" required
+                  class="w-full px-4 py-2.5 neo-inset rounded-2xl text-xs text-slate-800 border-none focus:outline-none focus:ring-2 focus:ring-blue-400/40">
+              </div>
+              <div>
+                <label for="recordType" class="block text-xs font-semibold text-slate-700 mb-1">Type</label>
+                <select id="recordType" required
+                  class="w-full px-4 py-2.5 neo-inset rounded-2xl text-xs text-slate-800 border-none focus:outline-none focus:ring-2 focus:ring-blue-400/40">
+                  <option>Lab Report</option>
+                  <option>Prescription</option>
+                  <option>Radiology Scan</option>
+                  <option>Discharge Summary</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="recordDate" class="block text-xs font-semibold text-slate-700 mb-1">Document Date</label>
+              <input type="date" id="recordDate" required
+                class="w-full px-4 py-2.5 neo-inset rounded-2xl text-xs text-slate-800 border-none focus:outline-none focus:ring-2 focus:ring-blue-400/40">
+            </div>
+
+            <div id="standaloneFileDropzone"
+              class="border-2 border-dashed border-teal-400/80 rounded-2xl p-8 text-center hover:bg-teal-50/40 transition cursor-pointer bg-white/40">
+              <input type="file" id="standaloneFileInput" required accept=".pdf,.png,.jpg,.jpeg" class="hidden">
+              <i data-lucide="file-up" class="w-8 h-8 mx-auto text-teal-600 mb-2"></i>
+              <p id="standaloneFileName" class="text-xs font-bold text-slate-700">Click to upload file (PDF, PNG, JPG)
+              </p>
+              <p class="text-[11px] text-slate-400 mt-1">Automated Python OCR will extract text during upload</p>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-2">
+              <button type="button" class="px-5 py-2.5 neu-button text-slate-600 rounded-2xl text-xs font-semibold"
+                onclick="document.getElementById('recordFormContainer').classList.add('hidden')">Cancel</button>
+              <button type="submit" id="saveRecordBtn"
+                class="px-5 py-2.5 neo-primary-btn text-white rounded-2xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer">
+                <i data-lucide="save" class="w-4 h-4"></i>
+                <span>Save to Cloud Vault</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- BEGIN: Search and Category Filter Bar -->
+        <section class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-1"
+          data-purpose="document-filters">
+          <!-- Sub-Search Bar -->
+          <div class="relative w-full sm:w-96">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+              </svg>
+            </span>
+            <input id="recordSearchInput"
+              class="w-full neo-inset rounded-full py-2.5 pl-11 pr-4 text-sm text-slate-700 placeholder-slate-400 border-0 focus:ring-2 focus:ring-indigo-400 focus:outline-none bg-transparent"
+              placeholder="Search extracted text, names..." type="text" />
+          </div>
+
+          <!-- Filter Pills List -->
+          <div id="recordFilterChips"
+            class="flex items-center gap-2.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 hide-scrollbar">
+            <button
+              class="filter-chip active px-5 py-2 rounded-full text-xs font-semibold bg-indigo-600 text-white shadow-md shadow-indigo-300 transition"
+              data-filter="all" type="button">
+              All
+            </button>
+            <button
+              class="filter-chip neu-button px-5 py-2 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 transition"
+              data-filter="Lab Report" type="button">
+              Lab Reports
+            </button>
+            <button
+              class="filter-chip neu-button px-5 py-2 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 transition"
+              data-filter="Prescription" type="button">
+              Prescriptions
+            </button>
+            <button
+              class="filter-chip neu-button px-5 py-2 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 transition"
+              data-filter="Radiology Scan" type="button">
+              Scans
+            </button>
+          </div>
+        </section>
+        <!-- END: Search and Category Filter Bar -->
+
+        <!-- BEGIN: Document List Container (Dynamic via app.js) -->
+        <section id="recordsList" class="neo-raised rounded-3xl p-4 divide-y divide-slate-200/60"
+          data-purpose="document-list">
+          <!-- Records loaded dynamically -->
+        </section>
+        <!-- END: Document List Container -->
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- PAGE 4: NOTIFICATIONS & ARRIVAL ALERTS (Template 5)                       -->
+      <!-- ========================================================================= -->
+      <div id="notifications" class="page hidden space-y-6">
+        <div class="neo-raised rounded-3xl p-7 border border-white/40 flex flex-col justify-start"
+          data-purpose="notification-center">
+          <!-- Board Header Area -->
+          <div class="flex items-center justify-between pb-6 flex-wrap gap-4 border-b border-slate-200"
+            data-purpose="board-header">
+            <div class="flex items-center gap-4">
+              <!-- Large Neomorphic Bell Icon -->
+              <div class="w-12 h-12 rounded-2xl neu-flat flex items-center justify-center text-[#4f6bf5]">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2.2" viewBox="0 0 24 24">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+              </div>
+              <div>
+                <h2 class="text-[1.35rem] font-bold text-[#142036] tracking-tight">Notifications & Arrival Alerts</h2>
+                <p class="text-[0.86rem] text-[#71829d] font-normal mt-0.5">Live reminders regarding doctor slots and
+                  queue token turns.</p>
+              </div>
+            </div>
+            <!-- Mark All As Read Button -->
+            <button id="markAllReadBtn"
+              class="neu-flat-sm neu-button rounded-full px-5 py-2.5 flex items-center gap-2 text-[#4f6bf5] font-semibold text-[0.86rem] transition-all cursor-pointer"
+              type="button">
+              <svg class="w-4 h-4 text-[#4f6bf5]" fill="none" stroke="currentColor" stroke-linecap="round"
+                stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>Mark All as Read</span>
+            </button>
+          </div>
+
+          <!-- Notification List Container -->
+          <div id="notificationsList" class="space-y-4 pt-6" data-purpose="notification-list">
+            <!-- Notification Card 1: Arrival Time Approaching -->
+            <article
+              class="neu-flat-sm rounded-2xl p-5 flex items-center justify-between transition-all hover:translate-y-[-1px] border border-white/50"
+              data-purpose="notification-item">
+              <div class="flex items-start gap-4">
+                <!-- Icon Tile -->
+                <div
+                  class="w-12 h-12 rounded-xl neu-flat flex items-center justify-center shrink-0 text-[#4f6bf5] mt-0.5">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="2.2" viewBox="0 0 24 24">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                  </svg>
+                </div>
+                <!-- Message Details -->
+                <div class="space-y-1">
+                  <h3 class="text-[0.98rem] font-bold text-[#19243d]">Arrival Time Window Approaching</h3>
+                  <p class="text-[0.86rem] text-[#61728e] font-normal">
+                    Your token #TK-14 with Dr. Rahul Mehta begins at 02:00 PM. Please proceed to OPD Room 204.
+                  </p>
+                  <!-- Scheduled Alert Badge -->
+                  <div class="pt-1.5">
+                    <span
+                      class="inline-block px-3 py-1 rounded-full text-[0.74rem] font-semibold bg-[#e7edf9] text-[#4f6bf5]">
+                      Scheduled Alert
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <!-- Right Meta & Unread Indicator -->
+              <div class="flex flex-col items-end shrink-0 pl-4 space-y-4">
+                <!-- Blue Unread Dot -->
+                <span class="w-2.5 h-2.5 rounded-full bg-[#415be6]"></span>
+                <!-- Timestamp -->
+                <span class="text-[0.8rem] text-[#8697b0] font-medium">2 min ago</span>
+              </div>
+            </article>
+
+            <!-- Notification Card 2: Document OCR Verified -->
+            <article
+              class="neu-flat-sm rounded-2xl p-5 flex items-center justify-between transition-all hover:translate-y-[-1px] border border-white/50"
+              data-purpose="notification-item">
+              <div class="flex items-start gap-4">
+                <!-- Checkmark Green Tile -->
+                <div
+                  class="w-12 h-12 rounded-xl neu-flat flex items-center justify-center shrink-0 text-[#10b981] mt-0.5">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="2.4" viewBox="0 0 24 24">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                </div>
+                <!-- Message Details -->
+                <div class="space-y-1">
+                  <h3 class="text-[0.98rem] font-bold text-[#19243d]">Document OCR Verified</h3>
+                  <p class="text-[0.86rem] text-[#61728e] font-normal">
+                    Lipid panel report uploaded to Supabase Storage and extracted with 96% confidence.
+                  </p>
+                </div>
+              </div>
+              <!-- Right Meta Timestamp -->
+              <div class="shrink-0 pl-4">
+                <span class="text-[0.8rem] text-[#8697b0] font-medium">2 hours ago</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- PAGE 5: SETTINGS                                                          -->
+      <!-- ========================================================================= -->
+      <div id="settings" class="page hidden space-y-6">
+        <div class="neo-raised rounded-3xl p-7 space-y-5">
+          <div class="pb-3 border-b border-slate-200">
+            <h2 class="text-xl font-bold text-slate-900">Account Settings</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Manage patient demographics, notification preferences, and privacy.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs max-w-2xl">
+            <div>
+              <label class="block text-slate-500 font-semibold mb-1">Full Name</label>
+              <input type="text" value="Jane Sharma" readonly
+                class="w-full neo-inset p-3 rounded-2xl border-none font-semibold text-slate-800">
+            </div>
+            <div>
+              <label class="block text-slate-500 font-semibold mb-1">Patient ID</label>
+              <input type="text" value="PAT-8821" readonly
+                class="w-full neo-inset p-3 rounded-2xl border-none font-semibold text-slate-800">
+            </div>
+            <div>
+              <label class="block text-slate-500 font-semibold mb-1">Mobile (SMS Alerts)</label>
+              <input type="text" value="+91 98765 43210" readonly
+                class="w-full neo-inset p-3 rounded-2xl border-none font-semibold text-slate-800">
+            </div>
+            <div>
+              <label class="block text-slate-500 font-semibold mb-1">ABHA Health ID</label>
+              <input type="text" value="91-8821-4492-10" readonly
+                class="w-full neo-inset p-3 rounded-2xl border-none font-semibold text-slate-800">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+    <!-- END: MainContentArea -->
+
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- DUAL-CHOICE BOOKING MODAL                                                 -->
+  <!-- ========================================================================= -->
+  <div id="bookingChoiceModal"
+    class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="neo-raised rounded-3xl border border-white/80 max-w-xl w-full p-6 sm:p-7 space-y-5 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+        <div>
+          <h3 class="font-bold text-slate-900 text-lg">Book Medical Consultation</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Select how you would like to book your consultation:</p>
+        </div>
+        <button
+          class="w-8 h-8 rounded-full neu-button flex items-center justify-center text-slate-400 hover:text-slate-600 cursor-pointer"
+          onclick="closeBookingChoiceModal()">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Choice 1: Standard Quick Form -->
+        <div id="choiceQuickForm" onclick="closeBookingChoiceModal(); showPage('appointments');"
+          class="p-5 rounded-2xl neu-flat hover:neu-flat-sm cursor-pointer transition space-y-3 group">
+          <div class="w-10 h-10 rounded-xl neu-inset text-blue-600 flex items-center justify-center transition">
+            <i data-lucide="form-input" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-800 text-sm">Standard Booking Form</h4>
+            <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+              Manually select your department, date, and preferred time slot directly.
+            </p>
+          </div>
+          <div class="pt-2 text-xs font-semibold text-blue-600 flex items-center gap-1">
+            Select Standard Form &rarr;
+          </div>
+        </div>
+
+        <!-- Choice 2: AI Voice Smart Intake -->
+        <a href="/intake/" id="choiceVoiceIntake"
+          class="p-5 rounded-2xl neu-flat hover:neu-flat-sm cursor-pointer transition space-y-3 shadow-sm group block text-left border border-teal-300/40">
+          <div class="flex items-center justify-between">
+            <div
+              class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-600 to-teal-500 text-white flex items-center justify-center shadow-md shadow-teal-500/20">
+              <i data-lucide="mic" class="w-5 h-5"></i>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-teal-100 text-teal-800">
+              AI Recommended
+            </span>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 text-sm">AI Voice & Clinical Intake</h4>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+              Speak in Hindi or English, optionally attach prescriptions, and receive smart doctor triage with an
+              instant token.
+            </p>
+          </div>
+          <div class="pt-2 text-xs font-semibold text-teal-700 flex items-center gap-1">
+            Start Voice Consultation &rarr;
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container Overlay -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none">
+  </div>
+
+  <!-- Record Preview Modal Overlay -->
+  <div id="previewModal"
+    class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="neo-raised rounded-3xl border border-white/80 max-w-lg w-full p-6 space-y-4 shadow-xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+        <div class="flex items-center gap-2 text-indigo-600">
+          <i data-lucide="file-text" class="w-5 h-5"></i>
+          <h3 id="previewModalTitle" class="font-bold text-slate-800 text-sm">Document Preview</h3>
+        </div>
+        <button
+          class="w-8 h-8 rounded-full neu-button flex items-center justify-center text-slate-400 hover:text-slate-600"
+          onclick="closeRecordPreview()">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div class="p-4 neu-inset rounded-2xl text-xs space-y-2 text-slate-600">
+        <p><strong class="text-slate-800">Document Type:</strong> <span id="previewModalType">Lab Report</span></p>
+        <p><strong class="text-slate-800">Date:</strong> <span id="previewModalDate">2026-08-20</span></p>
+        <div class="pt-2 border-t border-slate-200 text-slate-700">
+          <strong class="text-slate-800 block mb-1">OCR Extracted Text:</strong>
+          <pre id="previewModalExtractedText"
+            class="whitespace-pre-wrap font-sans text-xs bg-white/70 p-2.5 rounded-xl border border-slate-200 max-h-48 overflow-y-auto"></pre>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button class="px-4 py-2 neu-button text-slate-700 rounded-xl text-xs font-semibold transition"
+          onclick="closeRecordPreview()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div id="confirmModal"
+    class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="neo-raised rounded-3xl border border-white/80 max-w-md w-full p-6 space-y-4 shadow-xl">
+      <div class="flex items-center gap-3 text-amber-600">
+        <div class="w-10 h-10 rounded-2xl neu-inset flex items-center justify-center shrink-0">
+          <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+        </div>
+        <h3 id="confirmModalTitle" class="font-bold text-slate-800 text-base">Confirmation Required</h3>
+      </div>
+      <p id="confirmModalMessage" class="text-xs text-slate-600 leading-relaxed"></p>
+      <div class="flex justify-end gap-2 pt-2">
+        <button id="confirmCancelBtn"
+          class="px-4 py-2 neu-button text-slate-700 rounded-xl text-xs font-semibold transition">Cancel</button>
+        <button id="confirmOkBtn"
+          class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold transition shadow-sm">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./js/app.js"></script>
+
+</body>
+
+</html>

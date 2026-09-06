@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In — Dih Intelligent Healthcare Assistance</title>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Newsreader:opsz,wght@6..72,400..700&family=Silkscreen:wght@400;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background-color: #f5f7f6;
+      color: #17221f;
+      font-family: 'Geist', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .ambient-glow {
+      background: radial-gradient(circle at 10% 20%, rgba(77, 168, 149, .08) 0%, transparent 45%),
+                  radial-gradient(circle at 90% 80%, rgba(13, 148, 136, .06) 0%, transparent 45%);
+    }
+
+    .light-grid {
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, rgba(23, 34, 31, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(23, 34, 31, 0.04) 1px, transparent 1px);
+    }
+
+    .input-field {
+      background: #ffffff;
+      border: 1px solid rgba(23, 34, 31, 0.15);
+      color: #17221f;
+      transition: all 0.2s ease;
+    }
+    .input-field:focus {
+      border-color: #4da895;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(77, 168, 149, 0.15);
+    }
+
+    .tab-active {
+      background: #17221f !important;
+      color: #ffffff !important;
+    }
+
+    .btn-gradient {
+      background: linear-gradient(135deg, #17221f 0%, #2a3d38 100%);
+      color: #ffffff;
+      transition: all 0.2s ease;
+    }
+    .btn-gradient:hover {
+      opacity: 0.93;
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+
+<body class="ambient-glow light-grid min-h-screen flex flex-col justify-between p-4 sm:p-6 md:p-8">
+  <!-- Top Navigation Bar -->
+  <header class="max-w-5xl w-full mx-auto flex items-center justify-between py-2 relative z-10">
+    <a href="/" class="flex items-center gap-2.5 group">
+      <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center border border-slate-200 group-hover:border-[#4da895] transition shadow-sm">
+        <span class="material-symbols-outlined text-[#4da895] text-[22px]">health_and_safety</span>
+      </div>
+      <span class="text-xl font-bold tracking-tight text-[#17221f]">dih</span>
+    </a>
+
+    <div class="flex items-center gap-3">
+      <a href="/" class="bg-white/80 hover:bg-white text-[#17221f] border border-slate-200 px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition flex items-center gap-1.5 shadow-sm">
+        <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+        <span>Back to Home</span>
+      </a>
+      <a href="/intake/" class="bg-[#4da895] hover:bg-[#3f8c7b] text-white px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition flex items-center gap-1.5 shadow-sm">
+        <span class="material-symbols-outlined text-[16px]">mic</span>
+        <span class="hidden sm:inline">Voice Intake</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Login Card Container -->
+  <main class="flex-grow flex items-center justify-center py-10 px-2 relative z-10">
+    <div class="w-full max-w-md">
+
+      <!-- Form Card -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-[#17221f]/10 shadow-xl">
+        
+        <!-- Header badge & title -->
+        <div class="text-center mb-6">
+          <div class="inline-flex items-center gap-1.5 bg-[#4da895]/10 rounded-full px-3.5 py-1 text-[11px] font-mono uppercase tracking-wider text-[#357c6d] mb-3">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#4da895] animate-pulse"></span>
+            <span>Authentication Gateway</span>
+          </div>
+          <h1 class="font-['Newsreader'] text-4xl text-[#17221f] font-medium">Welcome back.</h1>
+          <p class="text-xs sm:text-sm text-[#64736f] mt-1.5">Select your role to access your clinical healthcare records</p>
+        </div>
+
+        <!-- Role Toggle Tabs -->
+        <div class="grid grid-cols-2 p-1 rounded-2xl bg-[#f5f7f6] mb-6 border border-[#17221f]/10">
+          <button id="patientTabBtn" type="button" onclick="switchTab('patient')" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-medium transition-all tab-active flex items-center justify-center gap-1.5">
+            <span class="material-symbols-outlined text-[17px]">person</span>
+            <span>Patient</span>
+          </button>
+          <button id="doctorTabBtn" type="button" onclick="switchTab('doctor')" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-medium text-[#17221f]/75 hover:text-[#17221f] transition-all flex items-center justify-center gap-1.5">
+            <span class="material-symbols-outlined text-[17px]">stethoscope</span>
+            <span>Doctor / Staff</span>
+          </button>
+        </div>
+
+        <!-- 1. PATIENT LOGIN FORM -->
+        <form id="patientForm" onsubmit="handlePatientLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs uppercase tracking-wider text-[#64736f] mb-1.5 font-medium">Email or Phone Number</label>
+            <div class="relative">
+              <span class="material-symbols-outlined text-[#64736f]/60 absolute left-3.5 top-1/2 -translate-y-1/2 text-[19px]">account_circle</span>
+              <input type="text" id="patientIdentifier" required value="jane.sharma@example.com" placeholder="e.g. jane.sharma@example.com" class="input-field w-full pl-10 pr-4 py-2.5 rounded-xl text-sm" />
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block text-xs uppercase tracking-wider text-[#64736f] font-medium">Password</label>
+              <a href="#" onclick="alert('Demo mode: any password is accepted.')" class="text-xs text-[#4da895] hover:underline transition">Forgot password?</a>
+            </div>
+            <div class="relative">
+              <span class="material-symbols-outlined text-[#64736f]/60 absolute left-3.5 top-1/2 -translate-y-1/2 text-[19px]">lock</span>
+              <input type="password" id="patientPassword" required value="patient123" placeholder="••••••••" class="input-field w-full pl-10 pr-10 py-2.5 rounded-xl text-sm" />
+              <button type="button" onclick="togglePassword('patientPassword', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#64736f]/60 hover:text-[#17221f] transition">
+                <span class="material-symbols-outlined text-[18px]">visibility</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Patient Demo Chips -->
+          <div>
+            <span class="text-[11px] text-[#64736f] uppercase tracking-wider block mb-2 font-mono">Quick Demo Accounts:</span>
+            <div class="flex flex-wrap gap-1.5">
+              <button type="button" onclick="setPatient('Jane Sharma', 'jane.sharma@example.com', 'PAT-8821')" class="glass-pill hover:bg-white/60 text-[#17221f] text-[11px] px-3 py-1 rounded-lg transition flex items-center gap-1 border border-black/5">
+                <span>Jane Sharma (PAT-8821)</span>
+              </button>
+              <button type="button" onclick="setPatient('Rajesh Patel', 'rajesh.patel@example.com', 'PAT-5291')" class="glass-pill hover:bg-white/60 text-[#17221f] text-[11px] px-3 py-1 rounded-lg transition flex items-center gap-1 border border-black/5">
+                <span>Rajesh Patel (PAT-5291)</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <button type="submit" id="patientSubmitBtn" class="btn-gradient w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer shadow-md">
+              <span>Sign In to Patient Portal</span>
+              <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+            </button>
+          </div>
+
+          <!-- Fast-track Voice Intake -->
+          <div class="pt-2 text-center">
+            <p class="text-xs text-[#64736f]">Need an AI voice consultation right now?</p>
+            <a href="/intake/" class="inline-flex items-center gap-1.5 text-xs text-[#388575] hover:underline mt-1 font-semibold">
+              <span class="material-symbols-outlined text-[15px]">mic</span>
+              <span>Open Voice Intake Kiosk without signing in</span>
+            </a>
+          </div>
+        </form>
+
+        <!-- 2. DOCTOR / STAFF LOGIN FORM -->
+        <form id="doctorForm" onsubmit="handleDoctorLogin(event)" class="space-y-4 hidden">
+          <div>
+            <label class="block text-xs uppercase tracking-wider text-[#64736f] mb-1.5 font-medium">Hospital ID</label>
+            <div class="relative">
+              <span class="material-symbols-outlined text-[#64736f]/60 absolute left-3.5 top-1/2 -translate-y-1/2 text-[19px]">domain</span>
+              <input type="text" id="doctorHospitalId" required value="HOSP101" placeholder="HOSP101" class="input-field w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-mono" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs uppercase tracking-wider text-[#64736f] mb-1.5 font-medium">Doctor ID</label>
+            <div class="relative">
+              <span class="material-symbols-outlined text-[#64736f]/60 absolute left-3.5 top-1/2 -translate-y-1/2 text-[19px]">badge</span>
+              <input type="text" id="doctorId" required value="DOC-CARD-01" placeholder="e.g. DOC-CARD-01" class="input-field w-full pl-10 pr-4 py-2.5 rounded-xl text-sm font-mono" />
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block text-xs uppercase tracking-wider text-[#64736f] font-medium">Doctor Password</label>
+              <span class="text-xs text-[#64736f]/70">Default: doctor123</span>
+            </div>
+            <div class="relative">
+              <span class="material-symbols-outlined text-[#64736f]/60 absolute left-3.5 top-1/2 -translate-y-1/2 text-[19px]">lock</span>
+              <input type="password" id="doctorPassword" required value="doctor123" placeholder="••••••••" class="input-field w-full pl-10 pr-10 py-2.5 rounded-xl text-sm" />
+              <button type="button" onclick="togglePassword('doctorPassword', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#64736f]/60 hover:text-[#17221f] transition">
+                <span class="material-symbols-outlined text-[18px]">visibility</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Doctor Demo Switcher -->
+          <div>
+            <span class="text-[11px] text-[#64736f] uppercase tracking-wider block mb-2 font-mono">Select Attending Physician:</span>
+            <div class="grid grid-cols-2 gap-1.5">
+              <button type="button" onclick="setDoctor('DOC-CARD-01')" class="glass-pill hover:bg-white/70 text-[#17221f] text-[11px] p-2 rounded-lg transition text-left border border-black/5">
+                <div class="font-medium text-[#17221f] truncate">Dr. Rajesh Sharma</div>
+                <div class="text-[10px] text-[#357c6d] font-semibold">Cardiology</div>
+              </button>
+              <button type="button" onclick="setDoctor('DOC-NEUR-01')" class="glass-pill hover:bg-white/70 text-[#17221f] text-[11px] p-2 rounded-lg transition text-left border border-black/5">
+                <div class="font-medium text-[#17221f] truncate">Dr. Ananya Roy</div>
+                <div class="text-[10px] text-[#357c6d] font-semibold">Neurology</div>
+              </button>
+              <button type="button" onclick="setDoctor('DOC-ORTH-01')" class="glass-pill hover:bg-white/70 text-[#17221f] text-[11px] p-2 rounded-lg transition text-left border border-black/5">
+                <div class="font-medium text-[#17221f] truncate">Dr. Vikram Malhotra</div>
+                <div class="text-[10px] text-[#357c6d] font-semibold">Orthopedics</div>
+              </button>
+              <button type="button" onclick="setDoctor('DOC-GEN-01')" class="glass-pill hover:bg-white/70 text-[#17221f] text-[11px] p-2 rounded-lg transition text-left border border-black/5">
+                <div class="font-medium text-[#17221f] truncate">Dr. Amit Verma</div>
+                <div class="text-[10px] text-[#357c6d] font-semibold">General Medicine</div>
+              </button>
+            </div>
+          </div>
+
+          <div id="doctorLoginMsg" class="hidden text-xs p-2.5 rounded-xl border"></div>
+
+          <div class="pt-2">
+            <button type="submit" id="doctorSubmitBtn" class="btn-gradient w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer shadow-md">
+              <span>Sign In to Physician Dashboard</span>
+              <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+            </button>
+          </div>
+
+          <div class="pt-1 text-center">
+            <a id="directDoctorLink" href="http://localhost:3001" target="_blank" class="inline-flex items-center gap-1 text-xs text-[#64736f] hover:text-[#17221f] transition font-medium">
+              <span>Direct Doctor Next.js Portal (Port 3001)</span>
+              <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+            </a>
+          </div>
+        </form>
+
+      </div>
+
+      <!-- Security & Regulatory Badges -->
+      <div class="flex items-center justify-center gap-6 mt-6 text-xs text-[#64736f]">
+        <div class="flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[#4da895] text-[16px]">verified_user</span>
+          <span>ABDM & HIPAA Compliant</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[#4da895] text-[16px]">lock</span>
+          <span>256-bit TLS Encrypted</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-5xl w-full mx-auto text-center py-3 text-xs text-[#64736f]/70">
+    &copy; 2026 Dih Healthcare. All clinical data protected under standard medical privacy guidelines.
+  </footer>
+
+  <script>
+    // Tab switcher
+    function switchTab(role) {
+      const patientBtn = document.getElementById('patientTabBtn');
+      const doctorBtn = document.getElementById('doctorTabBtn');
+      const patientForm = document.getElementById('patientForm');
+      const doctorForm = document.getElementById('doctorForm');
+
+      if (role === 'patient') {
+        patientBtn.classList.add('tab-active');
+        doctorBtn.classList.remove('tab-active');
+        patientForm.classList.remove('hidden');
+        doctorForm.classList.add('hidden');
+      } else {
+        doctorBtn.classList.add('tab-active');
+        patientBtn.classList.remove('tab-active');
+        doctorForm.classList.remove('hidden');
+        patientForm.classList.add('hidden');
+      }
+    }
+
+    // Toggle password visibility
+    function togglePassword(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector('.material-symbols-outlined');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        input.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    }
+
+    // Patient quick select
+    function setPatient(name, email, patId) {
+      document.getElementById('patientIdentifier').value = email;
+      localStorage.setItem('medicare_patient_name', name);
+      localStorage.setItem('medicare_patient_id', patId);
+      localStorage.setItem('medicare_patient_email', email);
+    }
+
+    // Doctor quick select
+    function setDoctor(docId) {
+      document.getElementById('doctorId').value = docId;
+    }
+
+    // Handle patient login
+    function handlePatientLogin(e) {
+      e.preventDefault();
+      const identifier = document.getElementById('patientIdentifier').value.trim();
+      const btn = document.getElementById('patientSubmitBtn');
+      btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[18px]">refresh</span><span>Authenticating...</span>';
+
+      // Save user session
+      const patientName = identifier.includes('rajesh') ? 'Rajesh Patel' : 'Jane Sharma';
+      const patientId = identifier.includes('rajesh') ? 'PAT-5291' : 'PAT-8821';
+
+      localStorage.setItem('medicare_patient_name', patientName);
+      localStorage.setItem('medicare_patient_id', patientId);
+      localStorage.setItem('medicare_patient_email', identifier);
+      localStorage.setItem('patient_authenticated', 'true');
+
+      setTimeout(() => {
+        window.location.href = '/portal.html';
+      }, 500);
+    }
+
+    // Handle doctor login
+    async function handleDoctorLogin(e) {
+      e.preventDefault();
+      const hospitalId = document.getElementById('doctorHospitalId').value.trim();
+      const doctorId = document.getElementById('doctorId').value.trim();
+      const password = document.getElementById('doctorPassword').value.trim();
+      const msg = document.getElementById('doctorLoginMsg');
+      const btn = document.getElementById('doctorSubmitBtn');
+
+      btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[18px]">refresh</span><span>Connecting to Hospital DB...</span>';
+      const doctorApiBase = `${window.location.protocol}//${window.location.hostname}:5001/api`;
+      const doctorPortalBase = `${window.location.protocol}//${window.location.hostname}:3001`;
+
+      msg.classList.add('hidden');
+
+      try {
+        const res = await fetch(`${doctorApiBase}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ hospitalId, doctorId, password })
+        });
+        const data = await res.json();
+
+        if (data.success && data.token) {
+          localStorage.setItem('doctor_token', data.token);
+          localStorage.setItem('doctor_info', JSON.stringify(data.doctor));
+
+          msg.className = 'text-xs p-2.5 rounded-xl border bg-emerald-50 border-emerald-300 text-emerald-800 flex items-center gap-1.5';
+          msg.innerHTML = '<span class="material-symbols-outlined text-[16px] text-emerald-600">check_circle</span><span>Authenticated! Redirecting to Physician Dashboard...</span>';
+          msg.classList.remove('hidden');
+
+          setTimeout(() => {
+            window.location.href = `${doctorPortalBase}/dashboard`;
+          }, 800);
+        } else {
+          throw new Error(data.message || 'Invalid physician credentials');
+        }
+      } catch (err) {
+        msg.className = 'text-xs p-2.5 rounded-xl border bg-amber-50 border-amber-300 text-amber-800 flex items-center gap-1.5';
+        msg.innerHTML = `<span class="material-symbols-outlined text-[16px] text-amber-600">info</span><span>Redirecting to Doctor Portal at port 3001...</span>`;
+        msg.classList.remove('hidden');
+        setTimeout(() => {
+          window.location.href = doctorPortalBase;
+        }, 1000);
+      }
+    }
+
+    // Auto-update links with current host
+    const directDocLink = document.getElementById('directDoctorLink');
+    if (directDocLink) {
+      directDocLink.href = `${window.location.protocol}//${window.location.hostname}:3001`;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #ebf1f8;
+    color: #334155;
+    font-family: 'Plus Jakarta Sans', 'Inter', 'Noto Sans Devanagari', sans-serif;
+  }
+}
+
+/* Base Neomorphic Styles from Templates 3, 6, 7, 8 */
+
+/* Primary raised soft elements */
+.neo-raised {
+  background: linear-gradient(145deg, #f3f8fd, #e4ecf4);
+  box-shadow: 8px 8px 20px rgba(166, 180, 200, 0.45),
+              -8px -8px 20px rgba(255, 255, 255, 0.95);
+}
+
+/* Subtle layered panel inside card */
+.neo-card-outer {
+  background: #ebf2f8;
+  box-shadow: 12px 14px 30px rgba(160, 178, 202, 0.4),
+              -10px -10px 26px rgba(255, 255, 255, 0.95),
+              inset 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.neo-card-inner {
+  background: linear-gradient(170deg, #f4f8fc 0%, #ebf2f9 100%);
+  box-shadow: inset 1px 1px 3px rgba(255, 255, 255, 0.9),
+              inset -1px -1px 3px rgba(166, 180, 200, 0.2);
+}
+
+/* Small raised buttons and pills */
+.neo-pill-btn {
+  background: #edf3f9;
+  box-shadow: 4px 4px 10px rgba(166, 180, 200, 0.35),
+              -4px -4px 10px rgba(255, 255, 255, 0.95);
+  transition: all 0.2s ease;
+}
+.neo-pill-btn:hover {
+  box-shadow: 2px 2px 6px rgba(166, 180, 200, 0.4),
+              -2px -2px 6px rgba(255, 255, 255, 1);
+  transform: translateY(1px);
+}
+.neo-pill-btn:active {
+  box-shadow: inset 2px 2px 5px rgba(166, 180, 200, 0.45),
+              inset -2px -2px 5px rgba(255, 255, 255, 0.9);
+}
+
+/* Inset recessed fields */
+.neo-inset {
+  background: #e6edf5;
+  box-shadow: inset 4px 4px 8px rgba(164, 179, 199, 0.45),
+              inset -4px -4px 8px rgba(255, 255, 255, 0.95);
+}
+
+/* Gentle recessed container */
+.neo-subtle-box {
+  background: rgba(246, 250, 254, 0.7);
+  box-shadow: inset 2px 2px 5px rgba(166, 180, 200, 0.15),
+              inset -2px -2px 5px rgba(255, 255, 255, 0.8),
+              0 2px 6px rgba(166, 180, 200, 0.1);
+}
+
+/* Recording Button concentric glow & shadows */
+.record-button-outer {
+  background: #edf3f9;
+  box-shadow: 6px 6px 16px rgba(166, 180, 200, 0.45),
+              -6px -6px 16px rgba(255, 255, 255, 0.95);
+}
+.record-glow {
+  box-shadow: 0 0 28px rgba(244, 63, 94, 0.38),
+              0 0 10px rgba(244, 63, 94, 0.25);
+}
+
+/* Multi-step card & upload zone from Template 6 */
+.neo-header {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  box-shadow: 
+    10px 10px 25px rgba(166, 180, 200, 0.18),
+    -10px -10px 25px rgba(255, 255, 255, 0.95);
+}
+
+.neo-card {
+  background: #ffffff;
+  box-shadow: 
+    16px 20px 40px -10px rgba(180, 195, 214, 0.45),
+    -12px -12px 30px rgba(255, 255, 255, 0.9);
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+}
+
+.neo-button-light {
+  background: #f7fafc;
+  box-shadow: 
+    6px 6px 14px rgba(190, 203, 218, 0.35),
+    -6px -6px 14px rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  transition: all 0.2s ease;
+}
+.neo-button-light:hover {
+  box-shadow: 
+    3px 3px 8px rgba(190, 203, 218, 0.3),
+    -3px -3px 8px rgba(255, 255, 255, 0.9);
+  transform: translateY(1px);
+}
+
+.neo-button-primary {
+  background: linear-gradient(135deg, #02a189 0%, #008f79 100%);
+  box-shadow: 
+    0 10px 25px -4px rgba(0, 161, 137, 0.42),
+    0 4px 10px -2px rgba(0, 161, 137, 0.3);
+  transition: all 0.2s ease;
+}
+.neo-button-primary:hover {
+  background: linear-gradient(135deg, #028e79 0%, #007d6a 100%);
+  box-shadow: 
+    0 14px 28px -4px rgba(0, 161, 137, 0.5),
+    0 6px 12px -2px rgba(0, 161, 137, 0.35);
+  transform: translateY(-1px);
+}
+
+.dashed-upload-zone {
+  border: 1.8px dashed #3fd1b9;
+  background: radial-gradient(circle at center, rgba(235, 253, 250, 0.6) 0%, rgba(246, 253, 252, 0.2) 100%);
+}
+
+/* Review Summary Metrics & Inset from Template 7 */
+.neo-metric-card {
+  background: #fbfdff;
+  border: 1px solid #eef3f7;
+  box-shadow: 0 4px 15px -2px rgba(186, 203, 219, 0.2),
+              inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.neo-button-soft {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 3px 8px rgba(148, 163, 184, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  transition: all 0.2s ease-in-out;
+}
+.neo-button-soft:hover {
+  background: #ffffff;
+  box-shadow: 0 6px 14px rgba(148, 163, 184, 0.22);
+  transform: translateY(-1px);
+}
+
+.neo-btn-primary {
+  background: linear-gradient(135deg, #0d9488 0%, #059669 100%);
+  box-shadow: 0 8px 20px -3px rgba(13, 148, 136, 0.42),
+              inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease-in-out;
+}
+.neo-btn-primary:hover {
+  background: linear-gradient(135deg, #0f766e 0%, #047857 100%);
+  box-shadow: 0 10px 25px -3px rgba(13, 148, 136, 0.52);
+  transform: translateY(-1px);
+}
+
+.neo-inset-well {
+  background: #f9fbfd;
+  border: 1px solid #e4ecf3;
+  box-shadow: inset 0 2px 5px rgba(160, 175, 190, 0.12),
+              0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Clinical structuring loader from Template 8 */
+.warning-banner {
+  background: #FFF5EC;
+  border-left: 4px solid #F68B1F;
+  box-shadow: 0 4px 18px rgba(246, 139, 31, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+@keyframes spin-smooth {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.spinner-circle {
+  animation: spin-smooth 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.spinner-glow {
+  box-shadow: 0 0 32px rgba(0, 168, 150, 0.22);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 4px;
+}

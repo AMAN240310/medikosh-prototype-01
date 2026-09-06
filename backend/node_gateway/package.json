@@ -1,0 +1,33 @@
+{
+  "name": "medicare-patient-gateway",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Patient gateway orchestrating voice intake, document extraction, clinical validation, and doctor allocation",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@supabase/supabase-js": "^2.48.1",
+    "axios": "^1.7.9",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "fastify": "^4.28.1",
+    "form-data": "^4.0.1",
+    "mongoose": "^8.9.5",
+    "multer": "^1.4.5-lts.1",
+    "socket.io": "^4.8.1",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.10.7",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}
