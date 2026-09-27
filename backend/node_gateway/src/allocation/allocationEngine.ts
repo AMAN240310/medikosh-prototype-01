@@ -1,4 +1,3 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { doctors } from "./data/doctors";
 import { analyzePatientSummary } from "./services/geminiService";
 import { filterEligibleDoctors } from "./services/eligibilityService";
@@ -6,32 +5,6 @@ import { evaluateContinuity } from "./services/followUpService";
 import { rankDoctors } from "./services/rankingService";
 import { requestSchedule, resolveDurationMinutes } from "./services/schedulingClient";
 import { AllocationMetadata, AllocationResponse, AlternativeOption, Doctor, PatientAnalysis } from "./types";
-
-interface AllocateBody {
-  patientSummary: string;
-}
-
-export async function allocationRoutes(app: FastifyInstance) {
-  app.post(
-    "/api/allocate",
-    async (request: FastifyRequest<{ Body: AllocateBody }>, reply: FastifyReply) => {
-      const { patientSummary } = request.body ?? {};
-
-      if (!patientSummary || typeof patientSummary !== "string" || !patientSummary.trim()) {
-        return reply.status(400).send({ error: "patientSummary (string) is required" });
-      }
-
-      try {
-        const response = await allocateDoctor(patientSummary);
-        return reply.send(response);
-      } catch (err) {
-        const message = err instanceof Error ? err.message : "Allocation failed";
-        request.log.error(err);
-        return reply.status(500).send({ error: message });
-      }
-    }
-  );
-}
 
 /**
  * Full pipeline (architecture preserved):

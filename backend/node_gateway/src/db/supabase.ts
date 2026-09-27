@@ -128,7 +128,7 @@ export async function fetchAppointments(patientId: string): Promise<AppointmentR
   }
 
   return Array.from(memorySupabase.appointments.values()).filter(
-    (a) => a.patient_id === patientId || a.patient_id === "PAT-8821"
+    (a) => a.patient_id === patientId
   );
 }
 

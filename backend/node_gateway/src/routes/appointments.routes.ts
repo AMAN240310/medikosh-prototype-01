@@ -1,13 +1,64 @@
 import { Router, Request, Response } from "express";
-import { fetchAppointments, saveAppointment, cancelAppointment, AppointmentRecord } from "../db/supabase";
-import { doctors } from "../allocation/data/doctors";
+import { fetchAppointments, saveAppointment, cancelAppointment, AppointmentRecord } from "../db/supabase.js";
+import { doctors } from "../allocation/data/doctors.js";
 
 export const appointmentsRouter = Router();
 
-// GET all appointments for patient
+// ─── Validation helpers ──────────────────────────────────────────────────────
+
+/** Accept ISO date YYYY-MM-DD only */
+function isValidDate(s: string): boolean {
+  return /^\d{4}-\d{2}-\d{2}$/.test(s) && !isNaN(Date.parse(s));
+}
+
+/** Accept "H:MM AM/PM" or "HH:MM AM/PM" */
+function isValidTimeSlot(s: string): boolean {
+  return /^\d{1,2}:\d{2}\s*(AM|PM)$/i.test(s.trim());
+}
+
+// ─── End-time calculation ────────────────────────────────────────────────────
+
+/**
+ * Add 15 minutes to a "HH:MM AM/PM" time string with full meridian rollover.
+ * Examples:
+ *   "09:00 AM" → "09:15 AM"
+ *   "09:50 AM" → "10:05 AM"
+ *   "11:50 AM" → "12:05 PM"   ← AM→PM rollover
+ *   "11:50 PM" → "12:05 AM"   ← PM→AM (midnight) rollover
+ */
+export function addFifteenMinutes(timeSlot: string): string {
+  const m = timeSlot.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (!m) return timeSlot;
+
+  let h = parseInt(m[1], 10);
+  let min = parseInt(m[2], 10) + 15;
+  let meridian = m[3].toUpperCase() as "AM" | "PM";
+
+  if (min >= 60) {
+    h += 1;
+    min -= 60;
+  }
+
+  // Handle 12-hour rollover with meridian flip
+  if (h === 12 && meridian === "AM") {
+    // 11:50 AM + 15 → 12:05 PM  (noon)
+    meridian = "PM";
+  } else if (h > 12) {
+    // e.g. 12:50 PM + 15 → 13:05 PM → 01:05 AM (midnight boundary)
+    h -= 12;
+    meridian = meridian === "AM" ? "PM" : "AM";
+  } else if (h === 12 && meridian === "PM") {
+    // 11:50 PM + 15 → 12:05 AM  (midnight)
+    meridian = "AM";
+  }
+
+  return `${String(h).padStart(2, "0")}:${String(min).padStart(2, "0")} ${meridian}`;
+}
+
+// GET all appointments for patient — patient ID resolved from JWT, not query string
 appointmentsRouter.get("/", async (req: Request, res: Response) => {
   try {
-    const patientId = (req.query.patientId as string) || "PAT-8821";
+    const patientId = req.user?.patientId || "PAT-8821";
     const appts = await fetchAppointments(patientId);
     return res.json({ success: true, appointments: appts });
   } catch (err: any) {
@@ -23,12 +74,28 @@ appointmentsRouter.post("/quick-book", async (req: Request, res: Response) => {
       appointmentDate,
       timeSlot,
       reason,
-      patientId = "PAT-8821",
-      patientName = "Jane Sharma",
     } = req.body;
 
-    if (!appointmentDate || !timeSlot) {
-      return res.status(400).json({ success: false, error: "Date and Time Slot are required" });
+    // Identity ALWAYS comes from the JWT — never trust client-supplied IDs
+    const patientId = req.user!.patientId!;
+    const patientName = req.user!.name;
+
+    // ── Input validation ────────────────────────────────────────────────────
+    if (!appointmentDate || !isValidDate(String(appointmentDate))) {
+      return res.status(400).json({ success: false, error: "appointmentDate must be a valid YYYY-MM-DD date." });
+    }
+    if (!timeSlot || !isValidTimeSlot(String(timeSlot))) {
+      return res.status(400).json({ success: false, error: "timeSlot must be in HH:MM AM/PM format (e.g. 09:30 AM)." });
+    }
+    if (typeof specialty !== "string" || specialty.trim().length === 0) {
+      return res.status(400).json({ success: false, error: "specialty must be a non-empty string." });
+    }
+
+    // ── Reject past dates ───────────────────────────────────────────────────
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (new Date(appointmentDate) < today) {
+      return res.status(400).json({ success: false, error: "appointmentDate cannot be in the past." });
     }
 
     // Match an active doctor in this specialty
@@ -48,8 +115,8 @@ appointmentsRouter.post("/quick-book", async (req: Request, res: Response) => {
       specialty: matchingDoc.specialty,
       room_number: "OPD Room 104",
       appointment_date: appointmentDate,
-      start_time: timeSlot,
-      end_time: timeSlot.replace("AM", "15 AM").replace("PM", "15 PM"),
+      start_time: timeSlot.trim(),
+      end_time: addFifteenMinutes(timeSlot.trim()),
       duration_minutes: 15,
       severity: "MEDIUM",
       token_number: tokenNumber,
@@ -72,10 +139,12 @@ appointmentsRouter.post("/revisit", async (req: Request, res: Response) => {
     const {
       previousDoctorId = "DOC003",
       previousAppointmentId,
-      patientId = "PAT-8821",
-      patientName = "Jane Sharma",
       days = 3,
     } = req.body;
+
+    // Identity from JWT — never from body
+    const patientId = req.user!.patientId!;
+    const patientName = req.user!.name;
 
     const doc = doctors.find((d) => d.id === previousDoctorId) || doctors[0];
 
@@ -121,10 +190,21 @@ appointmentsRouter.post("/revisit", async (req: Request, res: Response) => {
   }
 });
 
-// Cancel Appointment
+// Cancel Appointment — verify ownership before cancelling
 appointmentsRouter.post("/:id/cancel", async (req: Request, res: Response) => {
   try {
-    const ok = await cancelAppointment(req.params.id);
+    const appointmentId = req.params.id;
+    const patientId = req.user!.patientId!;
+
+    // Fetch the patient's own appointments and confirm this ID belongs to them
+    const patientAppointments = await fetchAppointments(patientId);
+    const owns = patientAppointments.some((a: any) => a.appointment_id === appointmentId);
+    if (!owns) {
+      // Return 404 — don't reveal that the appointment exists but belongs to someone else
+      return res.status(404).json({ success: false, message: "Appointment not found" });
+    }
+
+    const ok = await cancelAppointment(appointmentId);
     return res.json({ success: ok, message: ok ? "Appointment cancelled" : "Appointment not found" });
   } catch (err: any) {
     return res.status(500).json({ success: false, error: err.message });

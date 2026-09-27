@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign In — Dih Intelligent Healthcare Assistance</title>
+  <title>Sign In — Medikosh Intelligent Healthcare Assistance</title>
 
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,7 +68,7 @@
       <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center border border-slate-200 group-hover:border-[#4da895] transition shadow-sm">
         <span class="material-symbols-outlined text-[#4da895] text-[22px]">health_and_safety</span>
       </div>
-      <span class="text-xl font-bold tracking-tight text-[#17221f]">dih</span>
+      <span class="text-xl font-bold tracking-tight text-[#17221f]">Medikosh</span>
     </a>
 
     <div class="flex items-center gap-3">
@@ -257,10 +257,22 @@
 
   <!-- Footer -->
   <footer class="max-w-5xl w-full mx-auto text-center py-3 text-xs text-[#64736f]/70">
-    &copy; 2026 Dih Healthcare. All clinical data protected under standard medical privacy guidelines.
+    &copy; 2026 Medikosh Healthcare. All clinical data protected under standard medical privacy guidelines.
   </footer>
 
   <script>
+    // Resolve the Node gateway base URL — same logic as api.js
+    // When served from port 3000 (Python dev server), API calls go to port 5000.
+    // When served directly from Node (port 5000), use same origin.
+    const GATEWAY_URL =
+      window.location.port === "5000" ||
+      window.location.hostname.includes("ngrok") ||
+      window.location.hostname.includes("loca.lt")
+        ? window.location.origin
+        : (window.location.port === "3000"
+            ? `${window.location.protocol}//${window.location.hostname}:5000`
+            : window.location.origin);
+
     // Tab switcher
     function switchTab(role) {
       const patientBtn = document.getElementById('patientTabBtn');
@@ -308,24 +320,39 @@
     }
 
     // Handle patient login
-    function handlePatientLogin(e) {
+    async function handlePatientLogin(e) {
       e.preventDefault();
       const identifier = document.getElementById('patientIdentifier').value.trim();
+      const password  = document.getElementById('patientPassword').value;
       const btn = document.getElementById('patientSubmitBtn');
+      btn.disabled = true;
       btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[18px]">refresh</span><span>Authenticating...</span>';
 
-      // Save user session
-      const patientName = identifier.includes('rajesh') ? 'Rajesh Patel' : 'Jane Sharma';
-      const patientId = identifier.includes('rajesh') ? 'PAT-5291' : 'PAT-8821';
+      try {
+        const res = await fetch(`${GATEWAY_URL}/api/auth/login/patient`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: identifier, password }),
+        });
+        const data = await res.json();
 
-      localStorage.setItem('medicare_patient_name', patientName);
-      localStorage.setItem('medicare_patient_id', patientId);
-      localStorage.setItem('medicare_patient_email', identifier);
-      localStorage.setItem('patient_authenticated', 'true');
-
-      setTimeout(() => {
-        window.location.href = '/portal.html';
-      }, 500);
+        if (data.success && data.token) {
+          localStorage.setItem('medicare_token', data.token);
+          localStorage.setItem('medicare_patient_name', data.patient.name);
+          localStorage.setItem('medicare_patient_id', data.patient.patientId);
+          localStorage.setItem('medicare_patient_email', data.patient.email);
+          localStorage.setItem('patient_authenticated', 'true');
+          window.location.href = '/portal.html';
+        } else {
+          btn.disabled = false;
+          btn.innerHTML = '<span>Sign In to Patient Portal</span><span class="material-symbols-outlined text-[18px]">arrow_forward</span>';
+          alert(data.message || 'Invalid credentials. Please try again.');
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Sign In to Patient Portal</span><span class="material-symbols-outlined text-[18px]">arrow_forward</span>';
+        alert('Network error: ' + err.message);
+      }
     }
 
     // Handle doctor login
@@ -337,17 +364,15 @@
       const msg = document.getElementById('doctorLoginMsg');
       const btn = document.getElementById('doctorSubmitBtn');
 
-      btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[18px]">refresh</span><span>Connecting to Hospital DB...</span>';
-      const doctorApiBase = `${window.location.protocol}//${window.location.hostname}:5001/api`;
-      const doctorPortalBase = `${window.location.protocol}//${window.location.hostname}:3001`;
-
+      btn.disabled = true;
+      btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[18px]">refresh</span><span>Authenticating...</span>';
       msg.classList.add('hidden');
 
       try {
-        const res = await fetch(`${doctorApiBase}/auth/login`, {
+        const res = await fetch(`${GATEWAY_URL}/api/auth/login/doctor`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ hospitalId, doctorId, password })
+          body: JSON.stringify({ hospitalId, doctorId, password }),
         });
         const data = await res.json();
 
@@ -359,19 +384,20 @@
           msg.innerHTML = '<span class="material-symbols-outlined text-[16px] text-emerald-600">check_circle</span><span>Authenticated! Redirecting to Physician Dashboard...</span>';
           msg.classList.remove('hidden');
 
-          setTimeout(() => {
-            window.location.href = `${doctorPortalBase}/dashboard`;
-          }, 800);
+          setTimeout(() => { window.location.href = '/doctor.html'; }, 800);
         } else {
-          throw new Error(data.message || 'Invalid physician credentials');
+          btn.disabled = false;
+          btn.innerHTML = '<span>Sign In to Physician Dashboard</span><span class="material-symbols-outlined text-[18px]">arrow_forward</span>';
+          msg.className = 'text-xs p-2.5 rounded-xl border bg-rose-50 border-rose-300 text-rose-800 flex items-center gap-1.5';
+          msg.innerHTML = `<span class="material-symbols-outlined text-[16px] text-rose-600">error</span><span>${data.message || 'Invalid physician credentials'}</span>`;
+          msg.classList.remove('hidden');
         }
       } catch (err) {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Sign In to Physician Dashboard</span><span class="material-symbols-outlined text-[18px]">arrow_forward</span>';
         msg.className = 'text-xs p-2.5 rounded-xl border bg-amber-50 border-amber-300 text-amber-800 flex items-center gap-1.5';
-        msg.innerHTML = `<span class="material-symbols-outlined text-[16px] text-amber-600">info</span><span>Redirecting to Doctor Portal at port 3001...</span>`;
+        msg.innerHTML = `<span class="material-symbols-outlined text-[16px] text-amber-600">info</span><span>Network error: ${err.message}</span>`;
         msg.classList.remove('hidden');
-        setTimeout(() => {
-          window.location.href = doctorPortalBase;
-        }, 1000);
       }
     }
 

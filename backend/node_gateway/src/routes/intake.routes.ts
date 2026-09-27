@@ -2,15 +2,17 @@ import { Router, Request, Response } from "express";
 import multer from "multer";
 import FormData from "form-data";
 import axios from "axios";
-import { allocateDoctor } from "../allocation/allocationEngine";
+import bcrypt from "bcryptjs";
+import { allocateDoctor } from "../allocation/allocationEngine.js";
+import { validateUpload } from "../middleware/uploadValidation.middleware.js";
 import {
   PatientCaseModel,
   DoctorModel,
   PatientModel,
   AppointmentModel,
   memoryMongo,
-} from "../db/mongo";
-import { saveAppointment, AppointmentRecord } from "../db/supabase";
+} from "../db/mongo.js";
+import { saveAppointment, AppointmentRecord } from "../db/supabase.js";
 
 export const intakeRouter = Router();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
@@ -75,12 +77,14 @@ async function persistToDoctorPortal(params: DoctorPortalAppointmentParams) {
     });
 
     if (!patientDoc) {
-      // Default bcrypt password hash for 'patient123'
-      const defaultPasswordHash = "$2a$10$bAPQdJzCMHUqofLjsSvPeO9filHTF3NNrEQx1Wo2j4/6wHfCJfqka";
+      // Generate a secure random password for auto-created patients.
+      // These accounts are headless (created from intake); the patient should
+      // use the registration flow to claim the account with their own password.
+      const autoPassword = await bcrypt.hash(`auto-${Date.now()}-${Math.random()}`, 10);
       patientDoc = await PatientModel.create({
         name: safeName,
         email: patientEmail,
-        password: defaultPasswordHash,
+        password: autoPassword,
         phone: params.patientPhone || "+91 9876543210",
         age: params.patientAge || 35,
         gender: params.patientGender || "Female",
@@ -176,9 +180,12 @@ async function persistToDoctorPortal(params: DoctorPortalAppointmentParams) {
 }
 
 
-intakeRouter.post("/process", upload.array("files", 5), async (req: Request, res: Response) => {
+intakeRouter.post("/process", upload.array("files", 5), validateUpload(), async (req: Request, res: Response) => {
   try {
-    const { voiceTranscript, chiefComplaint, patientId = "PAT-8821", patientName = "Jane Sharma" } = req.body;
+    const { voiceTranscript, chiefComplaint } = req.body;
+    // Identity always from JWT — never trust body-supplied IDs
+    const patientId = req.user?.patientId || "PAT-8821";
+    const patientName = req.user?.name || "Patient";
     const files = req.files as Express.Multer.File[];
 
     let documentText = req.body.documentText || "";
@@ -391,7 +398,7 @@ intakeRouter.post("/process", upload.array("files", 5), async (req: Request, res
 });
 
 // Step 3 API: Run OCR + Clinical Pipeline Structuring Only (Returning clinical summary for patient review)
-intakeRouter.post("/structure", upload.array("files", 5), async (req: Request, res: Response) => {
+intakeRouter.post("/structure", upload.array("files", 5), validateUpload(), async (req: Request, res: Response) => {
   try {
     const { voiceTranscript, chiefComplaint } = req.body;
     const files = req.files as Express.Multer.File[];

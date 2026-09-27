@@ -5,6 +5,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createServer } from "node:http";
 import { Server, type Socket } from "socket.io";
+import { authRouter } from "./routes/auth.routes.js";
+import { authenticatePatient } from "./middleware/auth.middleware.js";
 
 import type { ConversationState, TurnMetrics } from "./voice/types/index";
 import { extractFromUtterance } from "./voice/clinical/symptomExtractor";
@@ -28,13 +30,36 @@ import { intakeRouter } from "./routes/intake.routes";
 import { appointmentsRouter } from "./routes/appointments.routes";
 import { recordsRouter } from "./routes/records.routes";
 import caseTakingRoutes from "./voice-engine/routes/caseTakingRoutes.js";
+import { doctorsRouter } from "./routes/doctors.routes.js";
 
 const PORT = Number(process.env.PORT) || 5000;
+
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "")
+  .split(",")
+  .map((o) => o.trim())
+  .filter(Boolean);
+
+// Always allow local dev origins; production adds real domains via ALLOWED_ORIGINS env var
+const DEFAULT_ORIGINS = [
+  "http://localhost:5000",
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "http://localhost:3001",
+];
+
+const allowedOriginSet = new Set([...DEFAULT_ORIGINS, ...ALLOWED_ORIGINS]);
 
 const app = express();
 app.use(
   cors({
-    origin: true,
+    origin: (origin, callback) => {
+      // Allow same-origin requests (no Origin header) or listed origins
+      if (!origin || allowedOriginSet.has(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`CORS: origin ${origin} not allowed`));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "api-subscription-key", "Accept"],
@@ -45,10 +70,13 @@ app.use(express.json({ limit: "15mb" }));
 app.use(express.urlencoded({ extended: true, limit: "15mb" }));
 
 // Mount API Routers
+app.use("/api/auth", authRouter);
+app.use("/api/doctors", doctorsRouter);          // public — patients browse doctors before login
 app.use("/api/case-taking", caseTakingRoutes);
-app.use("/api/intake", intakeRouter);
-app.use("/api/appointments", appointmentsRouter);
-app.use("/api/records", recordsRouter);
+// Patient routes — protected by JWT; demo tokens issued by /api/auth/login/patient are accepted
+app.use("/api/intake", authenticatePatient, intakeRouter);
+app.use("/api/appointments", authenticatePatient, appointmentsRouter);
+app.use("/api/records", authenticatePatient, recordsRouter);
 
 app.get("/health", (_req, res) => {
   res.json({
@@ -64,7 +92,13 @@ app.use(express.static(frontendPath));
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
-  cors: { origin: "*", methods: ["GET", "POST"] },
+  cors: {
+    origin: (origin, callback) => {
+      if (!origin || allowedOriginSet.has(origin)) callback(null, true);
+      else callback(new Error(`Socket.IO CORS: origin ${origin} not allowed`));
+    },
+    methods: ["GET", "POST"],
+  },
   maxHttpBufferSize: 5 * 1024 * 1024,
 });
 

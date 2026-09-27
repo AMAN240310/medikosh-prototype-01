@@ -2,8 +2,9 @@ import { Router, Request, Response } from "express";
 import multer from "multer";
 import FormData from "form-data";
 import axios from "axios";
-import { uploadToStorage, memorySupabase } from "../db/supabase";
-import { MedicalRecordModel, memoryMongo } from "../db/mongo";
+import { uploadToStorage, memorySupabase } from "../db/supabase.js";
+import { MedicalRecordModel, memoryMongo } from "../db/mongo.js";
+import { validateUpload } from "../middleware/uploadValidation.middleware.js";
 
 export const recordsRouter = Router();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
@@ -48,20 +49,22 @@ if (memoryMongo.records.size === 0) {
   });
 }
 
-// GET all records for patient
+// GET all records for patient — patient ID resolved from JWT, scoped in fallback too
 recordsRouter.get("/", async (req: Request, res: Response) => {
   try {
-    const patientId = (req.query.patientId as string) || "PAT-8821";
-    let records = [];
+    const patientId = req.user?.patientId || "PAT-8821";
+    let records: any[] = [];
 
     try {
       records = await MedicalRecordModel.find({ patientId }).sort({ date: -1 });
     } catch {
-      // fallback
+      // MongoDB offline — use in-memory store filtered to this patient only
     }
 
     if (!records || records.length === 0) {
-      records = Array.from(memoryMongo.records.values());
+      records = Array.from(memoryMongo.records.values()).filter(
+        (r: any) => r.patientId === patientId
+      );
     }
 
     return res.json({ success: true, records });
@@ -71,10 +74,12 @@ recordsRouter.get("/", async (req: Request, res: Response) => {
 });
 
 // POST Upload standalone record to Supabase Storage + MongoDB
-recordsRouter.post("/upload", upload.single("file"), async (req: Request, res: Response) => {
+recordsRouter.post("/upload", upload.single("file"), validateUpload(), async (req: Request, res: Response) => {
   try {
     const file = req.file;
-    const { title, type = "Lab Report", date = new Date().toISOString().split("T")[0], patientId = "PAT-8821" } = req.body;
+    const { title, type = "Lab Report", date = new Date().toISOString().split("T")[0] } = req.body;
+    // Identity always from JWT
+    const patientId = req.user?.patientId || "PAT-8821";
 
     if (!file) {
       return res.status(400).json({ success: false, error: "No document file provided" });
@@ -139,8 +144,8 @@ recordsRouter.post("/upload", upload.single("file"), async (req: Request, res: R
 });
 
 // Download / Serve file from in-memory fallback
-recordsRouter.get("/file/:path", (req: Request, res: Response) => {
-  const path = decodeURIComponent(req.params.path);
+recordsRouter.get("/file/:storagePath", (req: Request, res: Response) => {
+  const path = decodeURIComponent(req.params.storagePath as string);
   const file = memorySupabase.files.get(path);
   if (!file) {
     return res.status(404).send("File not found in storage");
